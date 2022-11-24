@@ -1,0 +1,119 @@
+cmake_minimum_required(VERSION 3.21)
+
+include(${CMAKE_SOURCE_DIR}/cmake/eni-util.cmake)
+
+if(NOT DEFINED ${ENI_PACKAGE_VERSION})
+    set(ENI_PACKAGE_VERSION 0.0.1)
+endif()
+
+# Initializes common settings for building Showroom projects
+macro(eni_set_target_defaults)
+    set(options NO_EXPORT)
+    set(oneValueArgs TARGET_NAME PACKAGE_VERSION PREFIX)
+    set(multiValueArgs CONAN_REQUIRES)
+    cmake_parse_arguments(ARG "${options}" "${oneValueArgs}"
+            "${multiValueArgs}" ${ARGN})
+
+    eni_string_to_camel_case("${ARG_PREFIX}" PREFIX_CC)
+    string(TOUPPER "${PREFIX_CC}" PREFIX_UC)
+
+    message(STATUS "Setting up target ${ARG_TARGET_NAME} (${ARG_PACKAGE_VERSION}) in namespace ${PREFIX_CC} using prefix ${PREFIX_UC}")
+
+    if(ARG_CONAN_REQUIRES)
+        message(STATUS "Required conan dependencies: ${ARG_CONAN_REQUIRES}")
+        if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+            message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+            file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/0.18.1/conan.cmake"
+                    "${CMAKE_BINARY_DIR}/conan.cmake"
+                    TLS_VERIFY ON)
+        endif()
+
+        include(${CMAKE_BINARY_DIR}/conan.cmake)
+
+        conan_cmake_configure(
+                REQUIRES ${ARG_CONAN_REQUIRES}
+                GENERATORS cmake_find_package
+        )
+
+        conan_cmake_autodetect(settings)
+
+        conan_cmake_install(PATH_OR_REFERENCE .
+                BUILD missing
+                REMOTE conancenter
+                SETTINGS ${settings})
+
+        set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_BINARY_DIR}")
+    endif()
+
+    target_compile_definitions(${ARG_TARGET_NAME} PUBLIC ${PREFIX_UC}_DEBUG)
+    target_compile_definitions(${ARG_TARGET_NAME} PRIVATE ${PREFIX_UC}_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+    target_compile_definitions(${ARG_TARGET_NAME} PUBLIC ${PREFIX_UC}_VERSION="${ARG_PACKAGE_VERSION}")
+    target_include_directories(${ARG_TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+    set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_STANDARD 20)
+    set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+    set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_EXTENSIONS OFF)
+    set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_FLAGS "-fcoroutines -Wall -Wextra")
+    set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_FLAGS_DEBUG "-g")
+    set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_FLAGS_RELEASE "-O0")
+
+    get_target_property(TARGET_TYPE ${ARG_TARGET_NAME} TYPE)
+    if (NOT TARGET_TYPE STREQUAL "EXECUTABLE")
+        add_library(${PREFIX_CC}::${ARG_TARGET_NAME} ALIAS ${ARG_TARGET_NAME})
+    endif ()
+
+    if(NOT ${ARG_NO_EXPORT})
+        # Export the targets
+        export(TARGETS ${ARG_TARGET_NAME} NAMESPACE ${PREFIX_CC}:: FILE ${PREFIX_CC}${ARG_TARGET_NAME}Targets.cmake)
+
+        # Export the package (only works if CMAKE_EXPORT_PACKAGE_REGISTRY is enabled)
+        export(PACKAGE ${PREFIX_CC})
+
+        # Create the package version config file
+        include(CMakePackageConfigHelpers)
+        write_basic_package_version_file(
+                ${PREFIX_CC}${ARG_TARGET_NAME}ConfigVersion.cmake
+                VERSION ${${PREFIX_UC}_PACKAGE_VERSION}
+                COMPATIBILITY AnyNewerVersion
+        )
+    endif()
+endmacro(eni_set_target_defaults)
+
+# Add a new unit test - all credits go to CMacIonize (https://github.com/bwvdnbro/CMacIonize)
+# A new target with the test sources is constructed, and a CTest test with the
+# same name is created. The new test is also added to the global list of test
+# contained in the check target
+macro(eni_add_unit_test)
+    set(options PARALLEL)
+    set(oneValueArgs NAME)
+    set(multiValueArgs SOURCES LIBS INCLUDE_DIRS)
+    cmake_parse_arguments(TEST "${options}" "${oneValueArgs}"
+            "${multiValueArgs}" ${ARGN})
+    message(STATUS "Generating Unit test ${TEST_NAME}")
+    #add_executable(${TEST_NAME} EXCLUDE_FROM_ALL ${TEST_SOURCES})
+    add_executable(${TEST_NAME} ${TEST_SOURCES})
+    target_compile_definitions(${TEST_NAME} PRIVATE -DCATCH_CONFIG_MAIN)
+    set_target_properties(${TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
+            ${PROJECT_BINARY_DIR}/rundir/test)
+    target_link_libraries(${TEST_NAME} PRIVATE ${TEST_LIBS})
+
+    eni_set_target_defaults(${TEST_NAME} TARGET_NAME ${TEST_NAME} NO_EXPORT CONAN_REQUIRES catch2/3.1.0)
+
+    find_package(Catch2 3 REQUIRED)
+    target_link_libraries(${TEST_NAME} PRIVATE Catch2::Catch2)
+    target_include_directories(${TEST_NAME} PRIVATE ${TEST_INCLUDE_DIRS})
+
+    if(TEST_PARALLEL AND HAVE_MPI)
+        set(TESTCOMMAND ${MPIEXEC})
+        set(TESTARGS ${MPIEXEC_NUMPROC_FLAG} 3 ${MPIEXEC_PREFLAGS}
+                "./${TEST_NAME}" ${MPIEXEC_POSTFLAGS})
+        set(TESTCOMMAND ${TESTCOMMAND} ${TESTARGS})
+    else(TEST_PARALLEL AND HAVE_MPI)
+        set(TESTCOMMAND ${TEST_NAME})
+    endif(TEST_PARALLEL AND HAVE_MPI)
+    add_test(NAME ${TEST_NAME}
+            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/rundir/test
+            COMMAND ${TESTCOMMAND})
+
+    set(TESTNAMES ${TESTNAMES} ${TEST_NAME})
+endmacro(eni_add_unit_test)
