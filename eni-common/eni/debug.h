@@ -15,11 +15,13 @@ struct Tracer {
 
     explicit Tracer(std::experimental::source_location location) : location(location) {}
 
+    void trace(const std::string &message = "tracepoint") const;
+
     void operator()(const std::string &message = "tracepoint") const;
 
     template<typename... Args>
     void operator()(const Args &...args) {
-        this->operator()(static_cast<const std::string &>(fmt::format(args...)));
+        trace(fmt::format(args...));
     }
 };
 

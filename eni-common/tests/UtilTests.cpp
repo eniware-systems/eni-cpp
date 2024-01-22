@@ -9,7 +9,7 @@
 using namespace eni;
 
 TEST_CASE("erase_if() works for std::set", "[Util]") {
-    std::set<int> x{1, 2, 3, 4, 5};
-    int r = erase_if(x, [](auto i) { return i > 3; });
-    REQUIRE(1 == 2);
+    std::set x{1, 2, 3, 4, 5};
+    const auto r = erase_if(x, [](auto i) { return i > 3; });
+    REQUIRE(r == 2);
 }

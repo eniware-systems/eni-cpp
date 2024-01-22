@@ -1,55 +1,39 @@
 //
-// Created by void on 14/07/2021.
+// Created by void on 10/1/23.
 //
 
 #include "logging.h"
 
-#include <cxxabi.h>
-#include <utility>
-
+#include <regex>
 #include <spdlog/sinks/stdout_color_sinks.h>
 
-namespace eni::logging {
+namespace eni {
+logger &get_logger(const std::string &name) {
+    auto logger = spdlog::get(name);
+
+    if (!logger) {
+        logger = spdlog::stdout_color_mt(name);
+    }
+
+    return *logger;
+}
 
 namespace detail {
-std::string _demangle(const char *mangled) {
-    auto ptr = std::unique_ptr<char, decltype(&std::free)>{
-            abi::__cxa_demangle(mangled, nullptr, nullptr, nullptr),
-            std::free};
-    std::string result = {ptr.get()};
+std::string _get_logger_from_function_name(const std::string &function_name) {
+    static const std::regex classPattern(R"((\w+::)*(\w+)::\w+\(.*)", std::regex_constants::icase);
+    static const std::regex funcPattern(R"((\w+)\(.*)", std::regex_constants::icase);
 
-    auto p = result.find_last_of("::");
-    if (p != std::string::npos) {
-        return result.substr(p + 1);
+    std::smatch match;
+    if (std::regex_search(function_name, match, classPattern)) {
+        const auto sm = match[std::distance(match.begin(), match.end()) - 1];
+        return sm.str();
     }
 
-    return result;
+    if (std::regex_search(function_name, match, classPattern)) {
+        return match[0].str();
+    }
+
+    return function_name;
 }
 }// namespace detail
-
-LogScope::LogScope(std::string name) : _name(std::move(name)) {}
-
-Logger LogScope::get() const {
-    return get_logger(_name);
-}
-Logger LogScope::operator*() const {
-    return get();
-}
-
-Logger get_logger(const std::string &name) {
-    static spdlog::sink_ptr defaultSink{};
-
-    if (!defaultSink) {
-        defaultSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        defaultSink->set_level(spdlog::level::debug);
-        defaultSink->set_pattern("(%l) [%n] %v");
-    }
-
-    return spdlog::logger(name, {defaultSink});
-}
-
-LogScope get(const std::string &name) {
-    return LogScope(name);
-}
-
-}// namespace eni::logging
+}// namespace eni

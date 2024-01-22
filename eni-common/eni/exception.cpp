@@ -2,7 +2,7 @@
 // Created by void on 24/08/2021.
 //
 
-#include <eni/Exception.h>
+#include <eni/exception.h>
 
 namespace eni {
 

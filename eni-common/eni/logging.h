@@ -1,49 +1,27 @@
 //
-// Created by void on 14/07/2021.
+// Created by void on 10/1/23.
 //
 
 #ifndef ENI_LOGGING_H
 #define ENI_LOGGING_H
 
-#include <spdlog/logger.h>
+#include <spdlog/spdlog.h>
 
-namespace eni::logging {
+// ReSharper disable once CppUnusedIncludeDirective
+#include <source_location>
+
+namespace eni {
+using logger = spdlog::logger;
+
+logger &get_logger(const std::string &name);
+
 namespace detail {
-std::string _demangle(char const *mangled);
-
-template<class T>
-std::string demangle() {
-    return _demangle(typeid(T).name());
-}
+std::string _get_logger_from_function_name(const std::string &function_name);
 }// namespace detail
 
-using Logger = spdlog::logger;
-Logger get_logger(const std::string &name);
+#define ENI_LOGGER_FOR_THIS \
+    ::eni::get_logger(::eni::detail::_get_logger_from_function_name(std::source_location::current().function_name()))
+}// namespace eni
 
-template<class T>
-Logger get_logger() {
-    return get_logger(detail::demangle<T>());
-}
-
-class LogScope {
-public:
-    explicit LogScope(std::string name);
-
-    [[nodiscard]] Logger get() const;
-
-    [[nodiscard]] Logger operator*() const;
-
-private:
-    std::string _name;
-};
-
-template<class T>
-LogScope get() {
-    return LogScope(detail::demangle<T>());
-}
-
-LogScope get(const std::string &name);
-
-}// namespace eni::logging
 
 #endif//ENI_LOGGING_H

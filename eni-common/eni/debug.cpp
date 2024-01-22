@@ -9,15 +9,19 @@
 
 namespace eni::debug {
 
-void Tracer::operator()(const std::string &message) const {
-    static const std::string RootDir = ENI_SOURCE_DIR;
-    auto filename = std::string(location.file_name()).substr(RootDir.size() + 1);
+void Tracer::trace(const std::string &message) const {
+    static const std::string rootDir = ENI_SOURCE_DIR;
+    auto filename = std::string(location.file_name()).substr(rootDir.size() + 1);
     auto thread = std::hash<std::thread::id>{}(std::this_thread::get_id());
 
-    auto formatted = fmt::format("[{} {}:{}@{}:{}] {}", thread, filename, location.function_name(), location.line(), location.column(), message);
+    const auto formatted = fmt::format("[{} {}:{}@{}:{}] {}", thread, filename, location.function_name(), location.line(), location.column(), message);
 
-    std::cout << formatted << std::endl
+    std::cout << formatted << "\n"
               << std::flush;
+}
+
+void Tracer::operator()(const std::string &message) const {
+    trace(message);
 }
 
 }// namespace eni::debug

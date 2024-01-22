@@ -18,31 +18,37 @@ public:
     using std::runtime_error::runtime_error;
 };
 
+// ReSharper disable once CppClassCanBeFinal
 class StateException : public Exception {
 public:
     using Exception::Exception;
 };
 
+// ReSharper disable once CppClassCanBeFinal
 class NotFoundException : public Exception {
 public:
     using Exception::Exception;
 };
 
+// ReSharper disable once CppClassCanBeFinal
 class NotImplementedException : public Exception {
 public:
     using Exception::Exception;
 };
 
+// ReSharper disable once CppClassCanBeFinal
 class NotSupportedException : public Exception {
 public:
     using Exception::Exception;
 };
 
+// ReSharper disable once CppClassCanBeFinal
 class IllegalOperationException : public Exception {
 public:
     using Exception::Exception;
 };
 
+// ReSharper disable once CppClassCanBeFinal
 class DuplicateKeyException : public Exception {
 public:
     using Exception::Exception;

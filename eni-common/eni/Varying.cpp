@@ -14,7 +14,7 @@ VaryingString make_varying_string(std::wstring condition, std::wstring validPatt
     return VaryingString(std::move(condition), std::move(validPattern), std::move(defaultValue));
 }
 
-VaryingLong make_varying_long(std::wstring condition, s64 minValue, s64 maxValue, s64 defaultValue) {
+VaryingLong make_varying_long(std::wstring condition, int64 minValue, int64 maxValue, int64 defaultValue) {
     return VaryingLong(std::move(condition), minValue, maxValue, defaultValue);
 }
 

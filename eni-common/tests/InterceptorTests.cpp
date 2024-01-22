@@ -2,7 +2,7 @@
 // Created by void on 21/08/2021.
 //
 
-#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_all.hpp>
 
 #include <eni/Interceptor.h>
 
@@ -55,14 +55,14 @@ public:
 class MyPriorityInterceptor {
 public:
     virtual ~MyPriorityInterceptor() = default;
-    explicit MyPriorityInterceptor(s32 priority = 0) : _priority(priority) {}
+    explicit MyPriorityInterceptor(int32 priority = 0) : _priority(priority) {}
 
-    void invoke(std::vector<s32> &priorities) const {
+    void invoke(std::vector<int32> &priorities) const {
         priorities.push_back(_priority);
     }
 
 private:
-    s32 _priority;
+    int32 _priority;
 };
 
 TEST_CASE("Can (un-)register interceptors", "[Interceptor]") {
@@ -125,7 +125,7 @@ TEST_CASE("Priorities are working", "[Interceptor]") {
     reg.registerInterceptor(std::make_shared<MyPriorityInterceptor>(5), 5);
     reg.registerInterceptor(std::make_shared<MyPriorityInterceptor>(0), 0);
 
-    std::vector<s32> priorities{};
+    std::vector<int32> priorities{};
     reg.invoke(&MyPriorityInterceptor::invoke, priorities);
 
     REQUIRE(priorities.size() == 7);

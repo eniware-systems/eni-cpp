@@ -1,6 +1,7 @@
 WarningsAsErrors: '*'
 Checks: 'boost-*,
   bugprone-*,
+  -bugprone-easily-swappable-parameters,
   cppcoreguidelines-*,
   -cppcoreguidelines-pro-type-reinterpret-cast,
   -cppcoreguidelines-special-member-functions,
@@ -49,6 +50,10 @@ CheckOptions:
     value: ''
   - key: readability-identifier-naming.ConstantCase
     value: CamelCase
+  - key: readability-identifier-naming.ConstantParameterCase
+    value: camelBack
+  - key: readability-identifier-naming.LocalConstantCase
+    value: camelBack
   - key: readability-identifier-naming.PrivateConstantCase
     value: camelBack
   - key: readability-identifier-naming.PrivateConstantPrefix

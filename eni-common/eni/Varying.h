@@ -6,7 +6,7 @@
 #define ENI_VARYING_H
 
 #include <eni/math.h>
-#include <eni/types.h>
+#include <eni/build_config.h>
 
 #include <limits>
 #include <memory>
@@ -49,7 +49,7 @@ struct VaryingNumeric : VaryingConditional {
     }
 };
 
-using VaryingLong = VaryingNumeric<s64>;
+using VaryingLong = VaryingNumeric<int64>;
 using VaryingFloat = VaryingNumeric<double>;
 
 using Varying = std::variant<
@@ -59,7 +59,7 @@ using Varying = std::variant<
 
 VaryingString make_varying_string(std::wstring condition, std::wstring validPattern = L".*", std::wstring defaultValue = L"");
 
-VaryingLong make_varying_long(std::wstring condition, s64 minValue, s64 maxValue, s64 defaultValue = {});
+VaryingLong make_varying_long(std::wstring condition, int64 minValue, int64 maxValue, int64 defaultValue = {});
 
 VaryingFloat make_varying_float(std::wstring condition, double minValue, double maxValue, double defaultValue = {});
 

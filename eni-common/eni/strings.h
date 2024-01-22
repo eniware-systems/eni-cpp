@@ -24,7 +24,7 @@ namespace eni::strings {
  * @param str The wide string to convert.
  * @return The converted string.
  */
-[[nodiscard]] std::string fromWide(const std::wstring &wideStr);
+[[nodiscard]] std::string fromWide(const std::wstring &str);
 
 }// namespace eni::strings
 

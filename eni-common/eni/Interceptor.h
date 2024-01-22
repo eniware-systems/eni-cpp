@@ -5,8 +5,7 @@
 #ifndef ENI_INTERCEPTOR_H
 #define ENI_INTERCEPTOR_H
 
-#include <eni/debug.h>
-#include <eni/types.h>
+#include <eni/build_config.h>
 
 #include <algorithm>
 #include <future>
@@ -18,7 +17,7 @@ namespace eni {
 /**
  * A registry for intercepting a single point-in-code. All registered Interceptors will be invoked in order of priority when the registries invoke() method has been called.
  *
- * @tparam Args The invocation arguments.
+ * @tparam InterceptorT The interceptor type
  */
 template<typename InterceptorT>
 class InterceptorRegistry {
@@ -33,7 +32,7 @@ public:
      *
      * @param interceptor The interceptor to register.
      */
-    void registerInterceptor(std::shared_ptr<interceptor_type> interceptor, s32 priority = 0) {
+    void registerInterceptor(std::shared_ptr<interceptor_type> interceptor, int32 priority = 0) {
         auto it = _interceptors.begin();
         for (; it != _interceptors.end(); ++it) {
             if (it->first < priority) {
@@ -123,7 +122,7 @@ public:
      */
     template<typename... ArgsT, typename... FunArgsT>
     std::future<void> invoke(std::launch launch_type, std::future<void> (interceptor_type::*FunT)(FunArgsT...), ArgsT &&...args) {
-        return std::async(launch_type, [this, FunT, args...] () mutable {
+        return std::async(launch_type, [this, FunT, args...]() mutable {
             for (const auto &i : _interceptors) {
                 if constexpr (sizeof...(ArgsT) > 0) {
                     // We can't perfect forward the arguments here because they might illegally transfer their ownership.
@@ -144,14 +143,14 @@ public:
      */
     template<typename... ArgsT, typename... FunArgsT>
     std::future<void> invoke(std::launch launch_type, std::future<void> (interceptor_type::*FunT)(FunArgsT...) const, ArgsT &&...args) {
-        return std::async(launch_type, [this, FunT, args...] () mutable {
+        return std::async(launch_type, [this, FunT, args...]() mutable {
             for (const auto &i : _interceptors) {
                 std::future<void> result;
 
                 if constexpr (sizeof...(ArgsT) > 0) {
-                    result = ((*i.second).*FunT)(std::forward<ArgsT>(args)...);
+                    result = (*i.second.*FunT)(std::forward<ArgsT>(args)...);
                 } else {
-                    result = ((*i.second).*FunT)();
+                    result = (*i.second.*FunT)();
                 }
 
                 result.get();
@@ -159,7 +158,7 @@ public:
         });
     }
 
-    public:
+public:
     /**
      * @return An iterator view of registered interceptors.
      */
@@ -168,7 +167,7 @@ public:
     }
 
 private:
-    std::list<std::pair<s32, std::shared_ptr<interceptor_type>>> _interceptors;
+    std::list<std::pair<int32, std::shared_ptr<interceptor_type>>> _interceptors;
 };
 
 }// namespace eni
