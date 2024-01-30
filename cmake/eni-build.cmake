@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.27)
 
-include(${CMAKE_SOURCE_DIR}/cmake/eni-util.cmake)
+include(eni-util)
 
 if (NOT DEFINED ${ENI_PACKAGE_VERSION})
     set(ENI_PACKAGE_VERSION 0.0.1)

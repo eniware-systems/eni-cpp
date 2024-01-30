@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.27)
 
 set(ENI_PACKAGE_VERSION 0.1)
 
-include(${CMAKE_SOURCE_DIR}/cmake/eni-build.cmake)
+include(eni-build)
 
 project(eni-common VERSION ${ENI_PACKAGE_VERSION} LANGUAGES CXX)
 
