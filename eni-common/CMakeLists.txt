@@ -10,7 +10,8 @@ set(TARGET_NAME Common)
 
 eni_gather_sources(OUT LIB_SOURCES eni)
 
-add_library(${TARGET_NAME} ${LIB_SOURCES})
+add_library(${TARGET_NAME} ${LIB_SOURCES}
+        eni/math.cpp)
 
 eni_set_target_defaults(
         TARGET_NAME ${TARGET_NAME}
@@ -25,3 +26,4 @@ target_link_libraries(${TARGET_NAME} PUBLIC spdlog::spdlog)
 eni_add_unit_test(NAME InterceptorTests SOURCES tests/InterceptorTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(NAME UtilTests SOURCES tests/UtilTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(NAME EventDispatcherTests SOURCES tests/EventDispatcherTests.cpp LIBS ${TARGET_NAME})
+eni_add_unit_test(NAME MathTests SOURCES tests/MathTests.cpp LIBS ${TARGET_NAME})
