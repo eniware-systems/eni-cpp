@@ -2,18 +2,17 @@
 // Created by mvonkeil on 2/8/24.
 //
 
-#ifndef ENI_SPATIAL_BOUNDINGBOX2_H
-#define ENI_SPATIAL_BOUNDINGBOX2_H
-
-#include "Vec2.h"
-
+#ifndef ENI_SPATIAL_RECT2_H
+#define ENI_SPATIAL_RECT2_H
 
 #include <eni/build_config.h>
+#include <eni/spatial/Vec2.h>
+
 #include <ostream>
 
 namespace eni::spatial {
 template<typename T>
-class BoundingBox2 {
+class Rect2 {
 public:
     using point_t = Vec2<T>;
 
@@ -29,7 +28,7 @@ private:
     }
 
 public:
-    BoundingBox2(point_t topLeft, point_t bottomRight) : _topLeft(topLeft), _bottomRight(bottomRight) {}
+    Rect2(point_t topLeft, point_t bottomRight) : _topLeft(topLeft), _bottomRight(bottomRight) {}
 
 public:
     [[nodiscard]] point_t getTopLeft() const { return _topLeft; }
@@ -56,32 +55,36 @@ public:
         return getWidth() * getHeight();
     }
 
+    [[nodiscard]] Vec2<T> getCenter() const {
+        return _topLeft + _bottomRight * 0.5;
+    }
+
 public:
-    friend bool operator==(const BoundingBox2 &lhs, const BoundingBox2 &rhs) {
+    friend bool operator==(const Rect2 &lhs, const Rect2 &rhs) {
         return lhs._topLeft == rhs._topLeft && lhs._bottomRight == rhs._bottomRight;
     }
-    friend bool operator!=(const BoundingBox2 &lhs, const BoundingBox2 &rhs) {
+    friend bool operator!=(const Rect2 &lhs, const Rect2 &rhs) {
         return !(lhs == rhs);
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const BoundingBox2 &obj) {
+    friend std::ostream &operator<<(std::ostream &os, const Rect2 &obj) {
         return os << "BoundingBox2(" << obj._topLeft << "," << obj._bottomRight << ")";
     }
 
-    friend bool operator<(const BoundingBox2 &lhs, const BoundingBox2 &rhs) {
+    friend bool operator<(const Rect2 &lhs, const Rect2 &rhs) {
         if (lhs._topLeft < rhs._topLeft)
             return true;
         if (rhs._topLeft < lhs._topLeft)
             return false;
         return lhs._bottomRight < rhs._bottomRight;
     }
-    friend bool operator<=(const BoundingBox2 &lhs, const BoundingBox2 &rhs) { return !(rhs < lhs); }
-    friend bool operator>(const BoundingBox2 &lhs, const BoundingBox2 &rhs) { return rhs < lhs; }
-    friend bool operator>=(const BoundingBox2 &lhs, const BoundingBox2 &rhs) { return !(lhs < rhs); }
+    friend bool operator<=(const Rect2 &lhs, const Rect2 &rhs) { return !(rhs < lhs); }
+    friend bool operator>(const Rect2 &lhs, const Rect2 &rhs) { return rhs < lhs; }
+    friend bool operator>=(const Rect2 &lhs, const Rect2 &rhs) { return !(lhs < rhs); }
 };
 
-using BoundingBox2i = BoundingBox2<int32>;
-using BoundingBox2r = BoundingBox2<real>;
+using Rect2i = Rect2<int32>;
+using Rect2r = Rect2<real>;
 }// namespace eni::spatial
 
 #endif//ENI_SPATIAL_BOUNDINGBOX2_H

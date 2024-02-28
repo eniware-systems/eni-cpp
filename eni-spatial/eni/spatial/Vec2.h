@@ -1,13 +1,12 @@
 #ifndef ENI_SPATIAL_VEC2_H
 #define ENI_SPATIAL_VEC2_H
 
-#include "eni/math.h"
+#include <eni/build_config.h>
+#include <eni/math.h>
 
 #include <cmath>
 #include <limits>
 #include <ostream>
-
-#include <eni/build_config.h>
 
 namespace eni::spatial {
 

@@ -3,6 +3,7 @@
 
 #include <eni/build_config.h>
 #include <eni/math.h>
+
 #include <ostream>
 
 namespace eni::spatial {

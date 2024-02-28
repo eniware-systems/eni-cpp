@@ -10,8 +10,7 @@ set(TARGET_NAME Spatial)
 
 eni_gather_sources(OUT LIB_SOURCES eni)
 
-add_library(${TARGET_NAME} ${LIB_SOURCES}
-        eni/spatial/BoundingBox2.h)
+add_library(${TARGET_NAME} ${LIB_SOURCES})
 
 target_link_libraries(${TARGET_NAME} PUBLIC Eni::Common)
 
