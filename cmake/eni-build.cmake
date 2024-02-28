@@ -56,7 +56,7 @@ endmacro(eni_set_target_defaults)
 # Add a new unit test - all credits go to CMacIonize (https://github.com/bwvdnbro/CMacIonize)
 # A new target with the test sources is constructed, and a CTest test with the
 # same name is created. The new test is also added to the global list of test
-# contained in the check target
+# contained in the check target.
 #
 # Params:
 #   PARALLEL: Whether to apply MPI flags for parallelization
@@ -65,12 +65,26 @@ endmacro(eni_set_target_defaults)
 #   LIBS: A list of libraries to link with
 #   INCLUDE_DIRS: Additional include directories for this test
 #
+# When compiled, the following macros will be available:
+#   ENI_TEST_SOURCE_DIR: The directory of the first source file
+#
 macro(eni_add_unit_test)
     set(options PARALLEL)
     set(oneValueArgs NAME)
     set(multiValueArgs SOURCES LIBS INCLUDE_DIRS)
     cmake_parse_arguments(TEST "${options}" "${oneValueArgs}"
             "${multiValueArgs}" ${ARGN})
+
+    if (NOT TEST_NAME)
+        list(LENGTH TEST_SOURCES len)
+        if (NOT "${len}" EQUAL 1)
+            message(FATAL_ERROR "No NAME was provided for unit test but the test has more than one source file")
+        endif ()
+
+        list(GET TEST_SOURCES 0 TEST_NAME)
+        get_filename_component(TEST_NAME ${TEST_NAME} NAME_WE)
+    endif ()
+
     message(STATUS "Generating Unit test ${TEST_NAME}")
     #add_executable(${TEST_NAME} EXCLUDE_FROM_ALL ${TEST_SOURCES})
     add_executable(${TEST_NAME} ${TEST_SOURCES})
@@ -83,6 +97,10 @@ macro(eni_add_unit_test)
     find_package(Catch2 CONFIG REQUIRED)
     target_link_libraries(${TEST_NAME} PRIVATE Catch2::Catch2WithMain)
     target_include_directories(${TEST_NAME} PRIVATE ${TEST_INCLUDE_DIRS})
+
+    list(GET TEST_SOURCES 0 ENI_TEST_SOURCE_DIR)
+    get_filename_component(ENI_TEST_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${ENI_TEST_SOURCE_DIR}" DIRECTORY)
+    target_compile_definitions(${TEST_NAME} PRIVATE ENI_TEST_SOURCE_DIR="${ENI_TEST_SOURCE_DIR}")
 
     if (TEST_PARALLEL AND HAVE_MPI)
         set(TESTCOMMAND ${MPIEXEC})

@@ -24,6 +24,7 @@ target_link_libraries(${TARGET_NAME} PUBLIC spdlog::spdlog)
 
 # Tests
 eni_add_unit_test(NAME InterceptorTests SOURCES tests/InterceptorTests.cpp LIBS ${TARGET_NAME})
-eni_add_unit_test(NAME UtilTests SOURCES tests/UtilTests.cpp LIBS ${TARGET_NAME})
-eni_add_unit_test(NAME EventDispatcherTests SOURCES tests/EventDispatcherTests.cpp LIBS ${TARGET_NAME})
-eni_add_unit_test(NAME MathTests SOURCES tests/MathTests.cpp LIBS ${TARGET_NAME})
+# Reminder: We can skip the NAME argument if we only have one source!
+eni_add_unit_test(SOURCES tests/UtilTests.cpp LIBS ${TARGET_NAME})
+eni_add_unit_test(SOURCES tests/EventDispatcherTests.cpp LIBS ${TARGET_NAME})
+eni_add_unit_test(SOURCES tests/MathTests.cpp LIBS ${TARGET_NAME})
