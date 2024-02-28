@@ -54,6 +54,12 @@ public:
     using Exception::Exception;
 };
 
+// ReSharper disable once CppClassCanBeFinal
+class IOException : public Exception {
+public:
+    using Exception::Exception;
+};
+
 }// namespace eni
 
 #endif//ENI_EXCEPTION_H
