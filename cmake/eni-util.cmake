@@ -39,7 +39,6 @@ endfunction()
 # eni_gather_sources(OUT MY_SOURCES
 #        ${CMAKE_CURRENT_SOURCE_DIR}/src
 # )
-#
 function(eni_gather_sources)
     cmake_parse_arguments(
             ARG
@@ -88,4 +87,70 @@ function(eni_gather_sources)
 
         message(STATUS "${message}")
     endif ()
+endfunction()
+
+# Dumps all available targets found in the current source directory
+function(eni_debug_dump_targets)
+    message(STATUS "Available targets: ${targets}")
+    set(targets)
+    eni_debug_get_targets(OUT targets)
+    foreach (_target ${targets})
+        message(STATUS "- ${_target}")
+    endforeach ()
+endfunction()
+
+# Recursively gets all available targets found in the current source directory
+# or any other directory when specified
+macro(eni_debug_get_targets)
+    set(options OUT DIR)
+
+    cmake_parse_arguments(
+            ARG
+            ""
+            "${options}"
+            ""
+            ${ARGN}
+    )
+
+    if (NOT ARG_OUT)
+        # set default output variable
+        SET(ARG_OUT TARGETS)
+    endif ()
+
+    if (NOT ARG_DIR)
+        set(ARG_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+    endif ()
+
+    get_property(subdirectories DIRECTORY ${ARG_DIR} PROPERTY SUBDIRECTORIES)
+
+    foreach (subdir ${subdirectories})
+        eni_debug_get_targets(OUT ${ARG_OUT} DIR ${ARG_DIR})
+    endforeach ()
+
+    get_property(current_targets DIRECTORY ${ARG_DIR} PROPERTY BUILDSYSTEM_TARGETS)
+
+    set(${ARG_OUT} "${ARG_OUT} ${current_targets}")
+endmacro()
+
+# Dumps all available variables found in the current build system
+function(eni_debug_dump_variables)
+    message(STATUS "Available variables: ${targets}")
+    get_cmake_property(_variableNames VARIABLES)
+    list(SORT _variableNames)
+    foreach (_variableName ${_variableNames})
+        if (ARGV0)
+            unset(MATCHED)
+            string(REGEX MATCH ${ARGV0} MATCHED ${_variableName})
+            if (NOT MATCHED)
+                continue()
+            endif ()
+        endif ()
+        message(STATUS "- ${_variableName}=${${_variableName}}")
+    endforeach ()
+endfunction()
+
+# Dumps a bunch of useful information about the current build environment
+function(eni_debug_dump)
+    eni_debug_dump_targets()
+    eni_debug_dump_variables()
 endfunction()
