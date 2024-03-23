@@ -126,6 +126,8 @@ private:
 };
 }// namespace detail
 
+using EventListenerHandle = std::unique_ptr<detail::EventDispatcherBase::ListenerHandle>;
+
 template<typename... EventTypes>
 class EventDispatcher : detail::EventDispatcher<EventTypes>... {
 protected:
@@ -138,18 +140,18 @@ private:
     class MultiListenerHandle final : public detail::EventDispatcherBase::ListenerHandle {
     public:
         explicit MultiListenerHandle(
-                std::array<std::unique_ptr<detail::EventDispatcherBase::ListenerHandle>, sizeof...(EventTypes)>
+                std::array<EventListenerHandle, sizeof...(EventTypes)>
                         wrappedHandles) : _handles(std::move(wrappedHandles)) {
         }
 
     private:
-        std::array<std::unique_ptr<detail::EventDispatcherBase::ListenerHandle>, sizeof...(EventTypes)> _handles{};
+        std::array<EventListenerHandle, sizeof...(EventTypes)> _handles{};
     };
 
     template<typename CallbackT, typename EventT>
     void _wrapAndAddEventListener(
             CallbackT listener,
-            std::array<std::unique_ptr<detail::EventDispatcherBase::ListenerHandle>, sizeof...(EventTypes)> &result,
+            std::array<EventListenerHandle, sizeof...(EventTypes)> &result,
             size_t index) {
         auto wrapper = [listener](const EventT &e) {
             listener(e);
@@ -161,9 +163,9 @@ private:
 public:
     // Generic implementation of addEventListener that allows the use of the auto keyword in a lambda expression.
     template<typename CallbackT>
-    std::unique_ptr<detail::EventDispatcherBase::ListenerHandle> addEventListener(CallbackT listener) {
+    EventListenerHandle addEventListener(CallbackT listener) {
         size_t i = 0;
-        std::array<std::unique_ptr<detail::EventDispatcherBase::ListenerHandle>, sizeof...(EventTypes)> wrapped;
+        std::array<EventListenerHandle, sizeof...(EventTypes)> wrapped;
         (_wrapAndAddEventListener<CallbackT, EventTypes>(listener, wrapped, i++), ...);
 
         return std::make_unique<MultiListenerHandle>(std::move(wrapped));
