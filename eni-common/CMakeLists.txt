@@ -29,3 +29,5 @@ eni_add_unit_test(NAME InterceptorTests SOURCES tests/InterceptorTests.cpp LIBS 
 # Reminder: We can skip the NAME argument if we only have one source!
 eni_add_unit_test(SOURCES tests/UtilTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(SOURCES tests/EventDispatcherTests.cpp LIBS ${TARGET_NAME})
+
+add_subdirectory(tests/embed_data_test)
