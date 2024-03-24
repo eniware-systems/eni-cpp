@@ -21,6 +21,9 @@ eni_set_target_defaults(
 find_package(spdlog REQUIRED)
 target_link_libraries(${TARGET_NAME} PUBLIC spdlog::spdlog)
 
+find_package(fmt REQUIRED)
+target_link_libraries(${TARGET_NAME} PUBLIC fmt::fmt)
+
 # Tests
 eni_add_unit_test(NAME InterceptorTests SOURCES tests/InterceptorTests.cpp LIBS ${TARGET_NAME})
 # Reminder: We can skip the NAME argument if we only have one source!
