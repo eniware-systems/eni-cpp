@@ -30,6 +30,7 @@ macro(eni_set_target_defaults)
     set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_FLAGS "-fcoroutines -Wall -Wextra")
     set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_FLAGS_DEBUG "-g")
     set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_FLAGS_RELEASE "-O0")
+    set_property(TARGET ${ARG_TARGET_NAME} PROPERTY POSITION_INDEPENDENT_CODE "ON")
 
     get_target_property(TARGET_TYPE ${ARG_TARGET_NAME} TYPE)
     if (NOT TARGET_TYPE STREQUAL "EXECUTABLE")
