@@ -1,12 +1,12 @@
-#ifndef ENI_SPATIAL_VEC4_H
-#define ENI_SPATIAL_VEC4_H
+#ifndef ENI_MATH_VEC4_H
+#define ENI_MATH_VEC4_H
 
 #include <eni/build_config.h>
 #include <eni/math.h>
 
 #include <ostream>
 
-namespace eni::spatial {
+namespace eni::math {
 
 template<typename T>
 class Vec4 {
@@ -283,7 +283,7 @@ Vec4<T> Vec4<T>::operator-() const {
 
 template<typename T>
 bool Vec4<T>::operator==(const Vec4 &other) const {
-    return math::is_equal_approx(x, other.x) && math::is_equal_approx(y, other.y) && math::is_equal_approx(z, other.z) && math::equals(w, other.w);
+    return math::is_equal_approx(x, other.x) && math::is_equal_approx(y, other.y) && math::is_equal_approx(z, other.z) && math::is_equal_approx(w, other.w);
 }
 
 template<typename T>
@@ -292,25 +292,25 @@ bool Vec4<T>::operator!=(const Vec4 &other) const {
 }
 
 template<typename T>
-Real Vec4<T>::length() const {
+real Vec4<T>::length() const {
     return std::sqrt(x * x + y * y + z * z + w * w);
 }
 
 template<typename T>
-Real Vec4<T>::squaredLength() const {
+real Vec4<T>::squaredLength() const {
     return x * x + y * y + z * z + w * w;
 }
 
 template<typename T>
-Real Vec4<T>::dot(const Vec4 &other) const {
+real Vec4<T>::dot(const Vec4 &other) const {
     return x * other.x + y * other.y + z * other.z + w * other.w;
 }
 
 template<typename T>
-Real Vec4<T>::distance(const Vec4 &other) const {
-    Real dX = (x - other.x);
-    Real dY = (y - other.y);
-    Real dZ = (z - other.z);
+real Vec4<T>::distance(const Vec4 &other) const {
+    real dX = (x - other.x);
+    real dY = (y - other.y);
+    real dZ = (z - other.z);
 
     return std::sqrt(dX * dX + dY * dY + dZ * dZ);
 }
@@ -324,7 +324,7 @@ Vec4<T> Vec4<T>::normalized() const {
 
 template<typename T>
 Vec4<T> &Vec4<T>::normalize() {
-    Real len = length();
+    real len = length();
     x /= len;
     y /= len;
     z /= len;
@@ -340,10 +340,10 @@ const Vec4<T> Vec4<T>::Unit(1, 1, 1, 1);
 
 template<typename T>
 const Vec4<T> Vec4<T>::Infinite(
-        std::numeric_limits<Real>::infinity(),
-        std::numeric_limits<Real>::infinity(),
-        std::numeric_limits<Real>::infinity(),
-        std::numeric_limits<Real>::infinity());
+        std::numeric_limits<real>::infinity(),
+        std::numeric_limits<real>::infinity(),
+        std::numeric_limits<real>::infinity(),
+        std::numeric_limits<real>::infinity());
 
 template<typename T>
 const Vec4<T> Vec4<T>::UnitX(1, 0, 0, 0);
@@ -363,9 +363,9 @@ const Vec4<T> Vec4<T>::NegativeUnitZ(0, 0, -1, 0);
 template<typename T>
 const Vec4<T> Vec4<T>::NegativeUnitW(0, 0, 0, -1);
 
-}// namespace eni::spatial
+}// namespace eni::math
 
-namespace eni::spatial {
+namespace eni::math {
 
 template<typename T>
 std::ostream &operator<<(std::ostream &s, const Vec4<T> &v) {
@@ -373,7 +373,7 @@ std::ostream &operator<<(std::ostream &s, const Vec4<T> &v) {
     return s;
 }
 
-}// namespace eni::spatial
+}// namespace eni::math
 
 
-#endif//ENI_SPATIAL_VEC4_H
+#endif//ENI_MATH_VEC4_H

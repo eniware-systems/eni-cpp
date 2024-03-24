@@ -1,5 +1,5 @@
-#ifndef ENI_SPATIAL_VEC2_H
-#define ENI_SPATIAL_VEC2_H
+#ifndef ENI_MATH_VEC2_H
+#define ENI_MATH_VEC2_H
 
 #include <eni/build_config.h>
 #include <eni/math.h>
@@ -8,7 +8,7 @@
 #include <limits>
 #include <ostream>
 
-namespace eni::spatial {
+namespace eni::math {
 
 template<typename T>
 class Vec2 {
@@ -333,14 +333,14 @@ const Vec2<T> Vec2<T>::NegativeUnitX(-1, 0);
 template<typename T>
 const Vec2<T> Vec2<T>::NegativeUnitY(0, -1);
 
-}// namespace eni::spatial
+}// namespace eni::math
 
-namespace eni::spatial {
+namespace eni::math {
 template<typename T>
 std::ostream &operator<<(std::ostream &s, const Vec2<T> &v) {
     s << "(" << v.x << "," << v.y << ")";
     return s;
 }
-}// namespace eni::spatial
+}// namespace eni::math
 
-#endif//ENI_SPATIAL_VEC2_H
+#endif//ENI_MATH_VEC2_H

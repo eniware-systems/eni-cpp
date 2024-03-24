@@ -2,15 +2,15 @@
 // Created by mvonkeil on 2/8/24.
 //
 
-#ifndef ENI_SPATIAL_RECT2_H
-#define ENI_SPATIAL_RECT2_H
+#ifndef ENI_MATH_RECT2_H
+#define ENI_MATH_RECT2_H
 
 #include <eni/build_config.h>
-#include <eni/spatial/Vec2.h>
+#include <eni/math/Vec2.h>
 
 #include <ostream>
 
-namespace eni::spatial {
+namespace eni::math {
 template<typename T>
 class Rect2 {
 public:
@@ -68,7 +68,7 @@ public:
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Rect2 &obj) {
-        return os << "BoundingBox2(" << obj._topLeft << "," << obj._bottomRight << ")";
+        return os << "Rect2(" << obj._topLeft << "," << obj._bottomRight << ")";
     }
 
     friend bool operator<(const Rect2 &lhs, const Rect2 &rhs) {
@@ -85,6 +85,6 @@ public:
 
 using Rect2i = Rect2<int32>;
 using Rect2r = Rect2<real>;
-}// namespace eni::spatial
+}// namespace eni::math
 
-#endif//ENI_SPATIAL_BOUNDINGBOX2_H
+#endif//ENI_MATH_BOUNDINGBOX2_H

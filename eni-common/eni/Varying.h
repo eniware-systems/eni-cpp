@@ -5,15 +5,14 @@
 #ifndef ENI_VARYING_H
 #define ENI_VARYING_H
 
-#include <eni/math.h>
 #include <eni/build_config.h>
 
+#include <complex>
 #include <limits>
 #include <memory>
 #include <string>
 #include <utility>
 #include <variant>
-#include <vector>
 
 namespace eni {
 
@@ -44,8 +43,10 @@ struct VaryingNumeric : VaryingConditional {
     T minValue = std::numeric_limits<T>::min();
     T maxValue = std::numeric_limits<T>::max();
 
-    [[nodiscard]] bool operator==(const VaryingNumeric<T> &other) const {
-        return math::is_equal_approx(other.maxValue, maxValue) && math::is_equal_approx(other.minValue, minValue) && condition == other.condition;
+    [[nodiscard]] bool operator==(const VaryingNumeric &other) const {
+        return std::fabs(other.maxValue - maxValue) < std::numeric_limits<real>::epsilon() &&
+               std::fabs(other.minValue - minValue) < std::numeric_limits<real>::epsilon() &&
+               condition == other.condition;
     }
 };
 

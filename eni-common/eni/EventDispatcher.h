@@ -36,8 +36,8 @@ decltype(_event_type_from_callback(&F::operator())) _event_type_from_callback(F 
 template<typename T>
 using event_type_from_callback = std::decay_t<decltype(_event_type_from_callback(std::declval<T>()))>;
 
-template<typename CallbackT, typename EventT>
-using is_valid_event_callback = std::is_same<EventT, event_type_from_callback<CallbackT>>;
+template<typename CallbackT, typename... EventTypes>
+using is_valid_event_callback = std::disjunction<std::is_same<EventTypes, event_type_from_callback<CallbackT>>...>;
 
 template<typename EventT>
 class EventDispatcher;

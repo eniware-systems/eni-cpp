@@ -1,12 +1,12 @@
-#ifndef ENI_SPATIAL_VEC3_H
-#define ENI_SPATIAL_VEC3_H
+#ifndef ENI_MATH_VEC3_H
+#define ENI_MATH_VEC3_H
 
 #include <eni/build_config.h>
 #include <eni/math.h>
 
 #include <ostream>
 
-namespace eni::spatial {
+namespace eni::math {
 
 template<typename T>
 class Vec3 {
@@ -366,6 +366,6 @@ std::ostream &operator<<(std::ostream &stream, const Vec3<T> &v) {
     return stream;
 }
 
-}// namespace eni::spatial
+}// namespace eni::math
 
-#endif//ENI_SPATIAL_VEC3_H
+#endif//ENI_MATH_VEC3_H

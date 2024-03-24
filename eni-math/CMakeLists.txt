@@ -4,9 +4,9 @@ set(ENI_PACKAGE_VERSION 0.1)
 
 include(eni-build)
 
-project(eni-spatial VERSION ${ENI_PACKAGE_VERSION} LANGUAGES CXX)
+project(eni-math VERSION ${ENI_PACKAGE_VERSION} LANGUAGES CXX)
 
-set(TARGET_NAME Spatial)
+set(TARGET_NAME Math)
 
 eni_gather_sources(OUT LIB_SOURCES eni)
 
@@ -21,3 +21,5 @@ eni_set_target_defaults(
 )
 
 # Tests
+eni_add_unit_test(SOURCES tests/MathTests.cpp LIBS ${TARGET_NAME})
+eni_add_unit_test(SOURCES tests/QuaternionTests.cpp LIBS ${TARGET_NAME})

@@ -10,8 +10,7 @@ set(TARGET_NAME Common)
 
 eni_gather_sources(OUT LIB_SOURCES eni)
 
-add_library(${TARGET_NAME} ${LIB_SOURCES}
-        eni/math.cpp)
+add_library(${TARGET_NAME} ${LIB_SOURCES})
 
 eni_set_target_defaults(
         TARGET_NAME ${TARGET_NAME}
@@ -27,4 +26,3 @@ eni_add_unit_test(NAME InterceptorTests SOURCES tests/InterceptorTests.cpp LIBS 
 # Reminder: We can skip the NAME argument if we only have one source!
 eni_add_unit_test(SOURCES tests/UtilTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(SOURCES tests/EventDispatcherTests.cpp LIBS ${TARGET_NAME})
-eni_add_unit_test(SOURCES tests/MathTests.cpp LIBS ${TARGET_NAME})

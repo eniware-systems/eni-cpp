@@ -5,8 +5,8 @@
 #ifndef ENI_MATH_H
 #define ENI_MATH_H
 
-#include <cmath>
 #include <eni/build_config.h>
+#include <cmath>
 
 namespace eni::math {
 

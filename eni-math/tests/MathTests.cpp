@@ -1,3 +1,5 @@
+#include <eni/build_config.h>
+
 #include <catch2/catch_all.hpp>
 #include <catch2/catch_approx.hpp>
 

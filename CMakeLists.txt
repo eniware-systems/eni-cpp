@@ -7,4 +7,4 @@ enable_testing()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(eni-common)
-add_subdirectory(eni-spatial)
+add_subdirectory(eni-math)
