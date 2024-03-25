@@ -12,10 +12,10 @@ class Matrix4;
  */
 class Quaternion {
 public:
-    real x; //< The x component of the quaternion.
-    real y; //< The y component of the quaternion.
-    real z; //< The z component of the quaternion.
-    real w; //< The w component of the quaternion.
+    real x{};//< The x component of the quaternion.
+    real y{};//< The y component of the quaternion.
+    real z{};//< The z component of the quaternion.
+    real w{};//< The w component of the quaternion.
 
     /**
      * Creates a new quaternion.
@@ -96,10 +96,10 @@ public:
     void setFromAxisAngle(const Vec3r &axis, real angle);
 
     /**
-     * Sets this quaternion from a transform matrix.
+     * Sets this quaternion from matrix transform matrix.
      * @param matrix The transform matrix to derive the direction from.
      */
-    void setFromRotationMatrix(const Matrix4 &a);
+    void setFromRotationMatrix(const Matrix4 &matrix);
 
     /**
      * Sets this quaternion to look at a direction.
@@ -132,7 +132,7 @@ public:
     /**
      * @return A normalized version of this quaternion.
      */
-    Quaternion normalized() const;
+    [[nodiscard]] Quaternion normalized() const;
 
     /**
      * Conjugates the quaternion.
@@ -142,7 +142,7 @@ public:
     /**
      * @return A new conjugated version of this quaternion.
      */
-    Quaternion conjugated() const;
+    [[nodiscard]] Quaternion conjugated() const;
 
     /**
      * Inverts this quaternion.
@@ -152,12 +152,12 @@ public:
     /**
      * @return An inverted version of this quaternion.
      */
-    Quaternion inverted() const;
+    [[nodiscard]] Quaternion inverted() const;
 
     /**
      * @return The length of this quaternion.
      */
-    real getLength() const;
+    [[nodiscard]] real getLength() const;
 
     /**
      * Converts this quaternion to a rotation mation.
@@ -178,34 +178,34 @@ public:
      * @param other The other quaternion to perform the operation with.
      * @return Whether this quaternion is equal to other.
      */
-    bool operator==(const Quaternion &other) const;
+    [[nodiscard]] bool operator==(const Quaternion &other) const;
 
     /**
      * Returns the gimbal pole, if existing.
      * @return -1 for south pole, 1 for north pole, 0 if not existing.
      */
-    int8 getGimbalPole() const;
+    [[nodiscard]] int8 getGimbalPole() const;
 
     /**
      * @return The yaw component of the quaternion in euler angles.
      */
-    real getYaw() const;
+    [[nodiscard]] real getYaw() const;
 
     /**
      * @return The pitch component of the quaternion in euler angles.
      */
-    real getPitch() const;
+    [[nodiscard]] real getPitch() const;
 
     /**
      * @return The roll component of the quaternion in euler angles.
      */
-    real getRoll() const;
+    [[nodiscard]] real getRoll() const;
 
 public:
     /**
      * The quaternion identity.
      */
-    static const Quaternion IDENTITY;
+    static const Quaternion Identity;
 };
 
 /**
@@ -216,6 +216,6 @@ public:
  */
 std::ostream &operator<<(std::ostream &stream, const Quaternion &v);
 
-} // namespace eni::math
+}// namespace eni::math
 
-#endif //ENI_MATH_QUATERNION_H
+#endif//ENI_MATH_QUATERNION_H
