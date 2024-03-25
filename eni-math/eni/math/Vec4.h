@@ -48,8 +48,8 @@ public:
  	 * @param nth The component number
  	 * @return the nth component value from this vector
  	 */
-    inline value_type &operator[](size_t nth) {
-        return *static_cast<value_type *>(&x + nth);
+    value_type &operator[](size_t nth) {
+        return *(&x + nth);
     }
 
     /**
@@ -57,7 +57,7 @@ public:
       * @return the nth component value from this vector
       */
     value_type operator[](size_t nth) const {
-        return *static_cast<const value_type *>(&x + nth);
+        return *(&x + nth);
     }
 
 public:
@@ -80,14 +80,14 @@ public:
      * @param scalar The scalar value
      * @return A new scaled vector
      */
-    Vec4 operator*(const value_type &scalar) const;
+    Vec4 operator*(const real &scalar) const;
 
     /**
      * Divides this by a scalar
      * @param scalar The scalar value
      * @return A new scaled vector
      */
-    Vec4 operator/(const value_type &scalar) const;
+    Vec4 operator/(const real &scalar) const;
 
     /**
      * Sets this vector to the values of another vector
@@ -115,14 +115,14 @@ public:
      * @param scalar The scalar value
      * @return This vector for chaining
      */
-    Vec4 &operator*=(const value_type &scalar);
+    Vec4 &operator*=(const real &scalar);
 
     /**
      * Divides this by a scalar
      * @param scalar The scalar value
      * @return This vector for chaining
      */
-    Vec4 &operator/=(const value_type &scalar);
+    Vec4 &operator/=(const real &scalar);
 
     /*
      * @return The negative vector
@@ -229,12 +229,12 @@ Vec4<T> Vec4<T>::operator-(const Vec4 &other) const {
 }
 
 template<typename T>
-Vec4<T> Vec4<T>::operator*(const value_type &scalar) const {
+Vec4<T> Vec4<T>::operator*(const real &scalar) const {
     return Vec4(x * scalar, y * scalar, z * scalar, w * scalar);
 }
 
 template<typename T>
-Vec4<T> Vec4<T>::operator/(const value_type &scalar) const {
+Vec4<T> Vec4<T>::operator/(const real &scalar) const {
     return Vec4(x / scalar, y / scalar, z / scalar, w / scalar);
 }
 
@@ -260,7 +260,7 @@ Vec4<T> &Vec4<T>::operator-=(const Vec4 &other) {
 }
 
 template<typename T>
-Vec4<T> &Vec4<T>::operator*=(const value_type &scalar) {
+Vec4<T> &Vec4<T>::operator*=(const real &scalar) {
     x *= scalar;
     y *= scalar;
     z *= scalar;
@@ -268,7 +268,7 @@ Vec4<T> &Vec4<T>::operator*=(const value_type &scalar) {
 }
 
 template<typename T>
-Vec4<T> &Vec4<T>::operator/=(const value_type &scalar) {
+Vec4<T> &Vec4<T>::operator/=(const real &scalar) {
     x /= scalar;
     y /= scalar;
     z /= scalar;

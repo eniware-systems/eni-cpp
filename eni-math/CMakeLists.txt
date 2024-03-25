@@ -21,5 +21,6 @@ eni_set_target_defaults(
 )
 
 # Tests
+eni_add_unit_test(SOURCES tests/BoundingBoxTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(SOURCES tests/MathTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(SOURCES tests/QuaternionTests.cpp LIBS ${TARGET_NAME})

@@ -45,7 +45,7 @@ public:
       * @param nth The component number
       * @return the nth component value from this vector
       */
-    inline value_type &operator[](size_t nth) {
+    value_type &operator[](size_t nth) {
         return *static_cast<value_type *>(&x + nth);
     }
 
@@ -77,14 +77,14 @@ public:
      * @param scalar The scalar value
      * @return A new scaled vector
      */
-    Vec3 operator*(value_type scalar) const;
+    Vec3 operator*(real scalar) const;
 
     /**
      * Divides this by a scalar
      * @param scalar The scalar value
      * @return A new scaled vector
      */
-    Vec3 operator/(value_type scalar) const;
+    Vec3 operator/(real scalar) const;
 
     /**
      * Sets this vector to the values of another vector
@@ -112,14 +112,14 @@ public:
      * @param scalar The scalar value
      * @return This vector for chaining
      */
-    Vec3 &operator*=(value_type scalar);
+    Vec3 &operator*=(real scalar);
 
     /**
      * Divides this by a scalar
      * @param scalar The scalar value
      * @return This vector for chaining
      */
-    Vec3 &operator/=(value_type scalar);
+    Vec3 &operator/=(real scalar);
 
     /*
      * @return The negative vector
@@ -230,12 +230,12 @@ Vec3<T> Vec3<T>::operator-(const Vec3 &other) const {
 }
 
 template<typename T>
-Vec3<T> Vec3<T>::operator*(value_type scalar) const {
+Vec3<T> Vec3<T>::operator*(real scalar) const {
     return Vec3(x * scalar, y * scalar, z * scalar);
 }
 
 template<typename T>
-Vec3<T> Vec3<T>::operator/(value_type scalar) const {
+Vec3<T> Vec3<T>::operator/(real scalar) const {
     return Vec3(x / scalar, y / scalar, z / scalar);
 }
 
@@ -259,7 +259,7 @@ Vec3<T> &Vec3<T>::operator-=(const Vec3 &other) {
 }
 
 template<typename T>
-Vec3<T> &Vec3<T>::operator*=(value_type scalar) {
+Vec3<T> &Vec3<T>::operator*=(real scalar) {
     x *= scalar;
     y *= scalar;
     z *= scalar;
@@ -267,7 +267,7 @@ Vec3<T> &Vec3<T>::operator*=(value_type scalar) {
 }
 
 template<typename T>
-Vec3<T> &Vec3<T>::operator/=(value_type scalar) {
+Vec3<T> &Vec3<T>::operator/=(real scalar) {
     x /= scalar;
     y /= scalar;
     z /= scalar;

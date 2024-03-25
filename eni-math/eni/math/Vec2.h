@@ -44,7 +44,7 @@ public:
       * @param nth The component number
       * @return the nth component value from this vector
       */
-    inline value_type &operator[](size_t nth) {
+    value_type &operator[](size_t nth) {
         return *static_cast<value_type *>(&x + nth);
     }
 
@@ -76,14 +76,14 @@ public:
      * @param scalar The scalar value
      * @return A new scaled vector
      */
-    Vec2 operator*(value_type scalar) const;
+    Vec2 operator*(real scalar) const;
 
     /**
      * Divides this by a scalar
      * @param scalar The scalar value
      * @return A new scaled vector
      */
-    Vec2 operator/(value_type scalar) const;
+    Vec2 operator/(real scalar) const;
 
     /**
      * Sets this vector to the values of another vector
@@ -111,14 +111,14 @@ public:
      * @param scalar The scalar value
      * @return This vector for chaining
      */
-    Vec2 &operator*=(value_type scalar);
+    Vec2 &operator*=(real scalar);
 
     /**
      * Divides this by a scalar
      * @param scalar The scalar value
      * @return This vector for chaining
      */
-    Vec2 &operator/=(value_type scalar);
+    Vec2 &operator/=(real scalar);
 
     /*
      * @return The negative vector
@@ -219,12 +219,12 @@ Vec2<T> Vec2<T>::operator-(const Vec2 &other) const {
 }
 
 template<typename T>
-Vec2<T> Vec2<T>::operator*(value_type scalar) const {
+Vec2<T> Vec2<T>::operator*(real scalar) const {
     return Vec2(x * scalar, y * scalar);
 }
 
 template<typename T>
-Vec2<T> Vec2<T>::operator/(value_type scalar) const {
+Vec2<T> Vec2<T>::operator/(real scalar) const {
     return Vec2(x / scalar, y / scalar);
 }
 
@@ -246,14 +246,14 @@ Vec2<T> &Vec2<T>::operator-=(const Vec2 &other) {
 }
 
 template<typename T>
-Vec2<T> &Vec2<T>::operator*=(value_type scalar) {
+Vec2<T> &Vec2<T>::operator*=(real scalar) {
     x *= scalar;
     y *= scalar;
     return *this;
 }
 
 template<typename T>
-Vec2<T> &Vec2<T>::operator/=(value_type scalar) {
+Vec2<T> &Vec2<T>::operator/=(real scalar) {
     x /= scalar;
     y /= scalar;
     return *this;
