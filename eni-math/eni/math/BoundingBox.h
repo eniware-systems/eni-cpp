@@ -365,7 +365,7 @@ Vec3<T> BoundingBox<T>::getCorner(const Corner &corner) const {
         case Corner::XYZ:
             return _max;
         default:
-            return Vec3<T>::ZERO;
+            return Vec3<T>::Zero;
     }
 }
 
