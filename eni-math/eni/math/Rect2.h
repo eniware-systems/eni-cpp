@@ -29,7 +29,11 @@ private:
     }
 
 public:
-    Rect2(point_t topLeft = point_t::Zero, point_t bottomRight = point_t::Zero) {
+    Rect2(value_t x1, value_t y1, value_t x2, value_t y2) {
+        set(x1, y1, x2, y2);
+    }
+
+    explicit Rect2(point_t topLeft = point_t::Zero, point_t bottomRight = point_t::Zero) {
         set(std::move(topLeft), std::move(bottomRight));
     }
 
@@ -45,7 +49,7 @@ public:
     }
 
     [[nodiscard]] value_t getLeft() const { return _topLeft.x; }
-    void getLeft(value_t v) {
+    void setLeft(value_t v) {
         set(v, _topLeft.y, _bottomRight.x, _bottomRight.y);
     }
 
@@ -65,14 +69,22 @@ public:
     }
 
     [[nodiscard]] point_t getTopLeft() const { return _topLeft; }
-    void setBottomRight(const point_t &top_left) {
+    void setTopLeft(const point_t &top_left) {
         _topLeft = top_left;
+        normalize();
+    }
+    void setTopLeft(const value_t x1, const value_t y1) {
+        _topLeft.set(y1, x1);
         normalize();
     }
 
     [[nodiscard]] point_t getBottomRight() const { return _bottomRight; }
-    void setTopRight(const point_t &bottom_right) {
+    void setBottomRight(const point_t &bottom_right) {
         _bottomRight = bottom_right;
+        normalize();
+    }
+    void setBottomRight(const value_t x2, const value_t y2) {
+        _bottomRight.set(x2, y2);
         normalize();
     }
 
@@ -92,8 +104,21 @@ public:
         return _topLeft + _bottomRight * 0.5;
     }
 
+    [[nodiscard]] bool isFinite() const {
+        return _topLeft.isFinite() && _bottomRight.isFinite();
+    }
+
+    [[nodiscard]] bool contains(const point_t &p) const {
+        return contains(p.x, p.y);
+    }
+
+    [[nodiscard]] bool contains(const value_t x, const value_t y) const {
+        return _topLeft.x <= x && _topLeft.y <= y && _bottomRight.x >= x && _bottomRight.y >= y;
+    }
+
 public:
     static const Rect2 Zero;
+    static const Rect2 Infinite;
 
 public:
     friend bool operator==(const Rect2 &lhs, const Rect2 &rhs) {
@@ -108,10 +133,12 @@ public:
     }
 
     friend bool operator<(const Rect2 &lhs, const Rect2 &rhs) {
-        if (lhs._topLeft < rhs._topLeft)
+        if (lhs._topLeft < rhs._topLeft) {
             return true;
-        if (rhs._topLeft < lhs._topLeft)
+        }
+        if (rhs._topLeft < lhs._topLeft) {
             return false;
+        }
         return lhs._bottomRight < rhs._bottomRight;
     }
 
@@ -122,6 +149,10 @@ public:
 
 template<typename T>
 const Rect2<T> Rect2<T>::Zero = Rect2(0, 0, 0, 0);
+
+template<typename T>
+const Rect2<T> Rect2<T>::Infinite = Rect2(std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity(), std::numeric_limits<T>::infinity());
+
 
 using Rect2i = Rect2<int32>;
 using Rect2r = Rect2<real>;

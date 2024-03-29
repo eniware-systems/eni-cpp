@@ -182,6 +182,11 @@ public:
      */
     [[nodiscard]] real distance(const Vec3 &other) const;
 
+    /**
+     * @return Whether all dimensions of this vector are finite.
+     */
+    [[nodiscard]] bool isFinite() const;
+
 public:
     static const Vec3 Zero;         //< The zero vector (0,0,0)
     static const Vec3 Unit;         //< The neutral vector (1,1,1)
@@ -332,6 +337,11 @@ Vec3<T> &Vec3<T>::normalize() {
     y /= len;
     z /= len;
     return *this;
+}
+
+template<typename T>
+bool Vec3<T>::isFinite() const {
+    return !std::isinf(x) && !std::isinf(y) && !std::isinf(z);
 }
 
 template<typename T>

@@ -178,6 +178,10 @@ public:
      */
     [[nodiscard]] real distance(const Vec4 &other) const;
 
+    /**
+     * @return Whether all dimensions of this vector are finite.
+     */
+    [[nodiscard]] bool isFinite() const;
 
 public:
     static const Vec4 Zero;         //< The zero vector (0,0,0,0)
@@ -330,6 +334,11 @@ Vec4<T> &Vec4<T>::normalize() {
     z /= len;
     w /= len;
     return *this;
+}
+
+template<typename T>
+bool Vec4<T>::isFinite() const {
+    return !std::isinf(x) && !std::isinf(y) && !std::isinf(z) && !std::isinf(w);
 }
 
 template<typename T>

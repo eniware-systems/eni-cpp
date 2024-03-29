@@ -174,6 +174,11 @@ public:
      */
     [[nodiscard]] real distance(const Vec2 &other) const;
 
+    /**
+     * @return Whether all dimensions of this vector are finite.
+     */
+    [[nodiscard]] bool isFinite() const;
+
 public:
     static const Vec2 Zero;         //< The zero vector (0,0)
     static const Vec2 Unit;         //< The neutral vector (1,1)
@@ -310,6 +315,11 @@ Vec2<T> &Vec2<T>::normalize() {
     x /= len;
     y /= len;
     return *this;
+}
+
+template<typename T>
+bool Vec2<T>::isFinite() const {
+    return !std::isinf(x) && !std::isinf(y);
 }
 
 template<typename T>
