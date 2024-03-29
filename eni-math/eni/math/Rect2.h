@@ -45,9 +45,24 @@ public:
     }
 
     [[nodiscard]] value_t getLeft() const { return _topLeft.x; }
+    void getLeft(value_t v) {
+        set(v, _topLeft.y, _bottomRight.x, _bottomRight.y);
+    }
+
     [[nodiscard]] value_t getTop() const { return _topLeft.y; }
+    void setTop(value_t v) {
+        set(_topLeft.x, v, _bottomRight.x, _bottomRight.y);
+    }
+
     [[nodiscard]] value_t getRight() const { return _bottomRight.x; }
+    void setRight(value_t v) {
+        set(_topLeft.x, _topLeft.y, v, _bottomRight.y);
+    }
+
     [[nodiscard]] value_t getBottom() const { return _bottomRight.y; }
+    void setBottom(value_t v) {
+        set(_topLeft.x, _topLeft.y, _bottomRight.x, v);
+    }
 
     [[nodiscard]] point_t getTopLeft() const { return _topLeft; }
     void setBottomRight(const point_t &top_left) {
