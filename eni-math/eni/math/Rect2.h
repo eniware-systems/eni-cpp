@@ -14,7 +14,8 @@ namespace eni::math {
 template<typename T>
 class Rect2 {
 public:
-    using point_t = Vec2<T>;
+    using value_t = T;
+    using point_t = Vec2<value_t>;
 
 private:
     point_t _topLeft;
@@ -28,9 +29,26 @@ private:
     }
 
 public:
-    Rect2(point_t topLeft, point_t bottomRight) : _topLeft(topLeft), _bottomRight(bottomRight) {}
+    Rect2(point_t topLeft = point_t::Zero, point_t bottomRight = point_t::Zero) {
+        set(std::move(topLeft), std::move(bottomRight));
+    }
 
 public:
+    void set(point_t topLeft, point_t bottomRight) {
+        set(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
+    }
+
+    void set(value_t x1, value_t y1, value_t x2, value_t y2) {
+        _topLeft.set(x1, y1);
+        _bottomRight.set(x2, y2);
+        normalize();
+    }
+
+    [[nodiscard]] value_t getLeft() const { return _topLeft.x; }
+    [[nodiscard]] value_t getTop() const { return _topLeft.y; }
+    [[nodiscard]] value_t getRight() const { return _bottomRight.x; }
+    [[nodiscard]] value_t getBottom() const { return _bottomRight.y; }
+
     [[nodiscard]] point_t getTopLeft() const { return _topLeft; }
     void setBottomRight(const point_t &top_left) {
         _topLeft = top_left;
@@ -43,21 +61,24 @@ public:
         normalize();
     }
 
-    [[nodiscard]] T getWidth() const {
+    [[nodiscard]] value_t getWidth() const {
         return _bottomRight.x - _topLeft.x;
     }
 
-    [[nodiscard]] T getHeight() const {
+    [[nodiscard]] value_t getHeight() const {
         return _bottomRight.y - _topLeft.y;
     }
 
-    [[nodiscard]] T getArea() const {
+    [[nodiscard]] value_t getArea() const {
         return getWidth() * getHeight();
     }
 
     [[nodiscard]] Vec2<T> getCenter() const {
         return _topLeft + _bottomRight * 0.5;
     }
+
+public:
+    static const Rect2 Zero;
 
 public:
     friend bool operator==(const Rect2 &lhs, const Rect2 &rhs) {
@@ -78,13 +99,18 @@ public:
             return false;
         return lhs._bottomRight < rhs._bottomRight;
     }
+
     friend bool operator<=(const Rect2 &lhs, const Rect2 &rhs) { return !(rhs < lhs); }
     friend bool operator>(const Rect2 &lhs, const Rect2 &rhs) { return rhs < lhs; }
     friend bool operator>=(const Rect2 &lhs, const Rect2 &rhs) { return !(lhs < rhs); }
 };
 
+template<typename T>
+const Rect2<T> Rect2<T>::Zero = Rect2(0, 0, 0, 0);
+
 using Rect2i = Rect2<int32>;
 using Rect2r = Rect2<real>;
+
 }// namespace eni::math
 
-#endif//ENI_MATH_BOUNDINGBOX2_H
+#endif//ENI_MATH_RECT2_H
