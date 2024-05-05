@@ -11,7 +11,7 @@ namespace eni::math {
 template<typename T>
 class Vec4 {
 public:
-    using value_type = real;
+    using value_type = T;
 
     value_type
             x,//< The x component
@@ -183,6 +183,11 @@ public:
      */
     [[nodiscard]] bool isFinite() const;
 
+    /**
+     * @return a raw pointer to the vector components.
+     */
+    [[nodiscard]] const T *data() const;
+
 public:
     static const Vec4 Zero;         //< The zero vector (0,0,0,0)
     static const Vec4 Unit;         //< The neutral vector (1,1,1,1)
@@ -339,6 +344,11 @@ Vec4<T> &Vec4<T>::normalize() {
 template<typename T>
 bool Vec4<T>::isFinite() const {
     return !std::isinf(x) && !std::isinf(y) && !std::isinf(z) && !std::isinf(w);
+}
+
+template<typename T>
+const T *Vec4<T>::data() const {
+    return &x;
 }
 
 template<typename T>
