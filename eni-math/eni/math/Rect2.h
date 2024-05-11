@@ -18,128 +18,110 @@ public:
     using point_t = Vec2<value_t>;
 
 private:
-    point_t _topLeft;
-    point_t _bottomRight;
+    point_t _p1;
+    point_t _p2;
 
 private:
-    void normalize() {
-        point_t tmp(std::min(_topLeft.x, _bottomRight.x), std::min(_topLeft.y, _bottomRight.y));
-        _bottomRight.set(std::max(_topLeft.x, _bottomRight.x), std::max(_topLeft.y, _bottomRight.y));
-        _topLeft = tmp;
+    void _normalize() {
+        point_t tmp(std::min(_p1.x, _p2.x), std::min(_p1.y, _p2.y));
+        _p2.set(std::max(_p1.x, _p2.x), std::max(_p1.y, _p2.y));
+        _p1 = tmp;
     }
 
 public:
-    Rect2(value_t x1, value_t y1, value_t x2, value_t y2) {
-        set(x1, y1, x2, y2);
-    }
+    Rect2(value_t x1, value_t y1, value_t x2, value_t y2) { set(x1, y1, x2, y2); }
 
-    explicit Rect2(point_t topLeft = point_t::Zero, point_t bottomRight = point_t::Zero) {
-        set(std::move(topLeft), std::move(bottomRight));
-    }
+    explicit Rect2(point_t p1 = point_t::Zero, point_t p2 = point_t::Zero) { set(std::move(p1), std::move(p2)); }
 
 public:
-    void set(point_t topLeft, point_t bottomRight) {
-        set(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
-    }
+    void set(point_t p1, point_t p2) { set(p1.x, p1.y, p2.x, p2.y); }
 
     void set(value_t x1, value_t y1, value_t x2, value_t y2) {
-        _topLeft.set(x1, y1);
-        _bottomRight.set(x2, y2);
-        normalize();
+        _p1.set(x1, y1);
+        _p2.set(x2, y2);
+        _normalize();
     }
 
-    [[nodiscard]] value_t getLeft() const { return _topLeft.x; }
-    void setLeft(value_t v) {
-        set(v, _topLeft.y, _bottomRight.x, _bottomRight.y);
+    [[nodiscard]] value_t getX() const { return _p1.x; }
+
+    void setX(value_t v) {
+        _p1.x = v;
+        _normalize();
     }
 
-    [[nodiscard]] value_t getTop() const { return _topLeft.y; }
-    void setTop(value_t v) {
-        set(_topLeft.x, v, _bottomRight.x, _bottomRight.y);
+    [[nodiscard]] value_t getY() const { return _p1.y; }
+
+    void setY(value_t v) {
+        _p1.y = v;
+        _normalize();
     }
 
-    [[nodiscard]] value_t getRight() const { return _bottomRight.x; }
-    void setRight(value_t v) {
-        set(_topLeft.x, _topLeft.y, v, _bottomRight.y);
+    [[nodiscard]] value_t getX2() const { return _p2.x; }
+
+    void setX2(value_t v) {
+        _p2.x = v;
+        _normalize();
     }
 
-    [[nodiscard]] value_t getBottom() const { return _bottomRight.y; }
-    void setBottom(value_t v) {
-        set(_topLeft.x, _topLeft.y, _bottomRight.x, v);
+    [[nodiscard]] value_t getY2() const { return _p2.y; }
+
+    void setY2(value_t v) {
+        _p2.y = v;
+        _normalize();
     }
 
-    [[nodiscard]] point_t getTopLeft() const { return _topLeft; }
-    void setTopLeft(const point_t &top_left) {
-        _topLeft = top_left;
-        normalize();
-    }
-    void setTopLeft(const value_t x1, const value_t y1) {
-        _topLeft.set(y1, x1);
-        normalize();
+    [[nodiscard]] const point_t &getP1() const { return _p1; }
+
+    void setP1(const point_t &p1) {
+        _p1 = p1;
+        _normalize();
     }
 
-    [[nodiscard]] point_t getBottomRight() const { return _bottomRight; }
-    void setBottomRight(const point_t &bottom_right) {
-        _bottomRight = bottom_right;
-        normalize();
-    }
-    void setBottomRight(const value_t x2, const value_t y2) {
-        _bottomRight.set(x2, y2);
-        normalize();
+    void setP1(const value_t x1, const value_t y1) {
+        _p1.set(y1, x1);
+        _normalize();
     }
 
-    [[nodiscard]] value_t getWidth() const {
-        return _bottomRight.x - _topLeft.x;
+    [[nodiscard]] const point_t &getP2() const { return _p2; }
+
+    void setP2(const point_t &p2) {
+        _p2 = p2;
+        _normalize();
     }
 
-    [[nodiscard]] value_t getHeight() const {
-        return _bottomRight.y - _topLeft.y;
+    void setP2(const value_t x2, const value_t y2) {
+        _p2.set(x2, y2);
+        _normalize();
     }
 
-    [[nodiscard]] value_t getArea() const {
-        return getWidth() * getHeight();
-    }
+    [[nodiscard]] value_t getWidth() const { return _p2.x - _p1.x; }
 
-    [[nodiscard]] Vec2<T> getCenter() const {
-        return _topLeft + _bottomRight * 0.5;
-    }
+    [[nodiscard]] value_t getHeight() const { return _p2.y - _p1.y; }
 
-    [[nodiscard]] bool isFinite() const {
-        return _topLeft.isFinite() && _bottomRight.isFinite();
-    }
+    [[nodiscard]] value_t getArea() const { return getWidth() * getHeight(); }
 
-    [[nodiscard]] bool contains(const point_t &p) const {
-        return contains(p.x, p.y);
-    }
+    [[nodiscard]] Vec2<T> getCenter() const { return _p1 + _p2 * 0.5; }
 
-    [[nodiscard]] bool contains(const value_t x, const value_t y) const {
-        return _topLeft.x <= x && _topLeft.y <= y && _bottomRight.x >= x && _bottomRight.y >= y;
-    }
+    [[nodiscard]] bool isFinite() const { return _p1.isFinite() && _p2.isFinite(); }
+
+    [[nodiscard]] bool contains(const point_t &p) const { return contains(p.x, p.y); }
+
+    [[nodiscard]] bool contains(const value_t x, const value_t y) const { return _p1.x <= x && _p1.y <= y && _p2.x >= x && _p2.y >= y; }
 
 public:
     static const Rect2 Zero;
     static const Rect2 Infinite;
 
 public:
-    friend bool operator==(const Rect2 &lhs, const Rect2 &rhs) {
-        return lhs._topLeft == rhs._topLeft && lhs._bottomRight == rhs._bottomRight;
-    }
-    friend bool operator!=(const Rect2 &lhs, const Rect2 &rhs) {
-        return !(lhs == rhs);
-    }
+    friend bool operator==(const Rect2 &lhs, const Rect2 &rhs) { return lhs._p1 == rhs._p1 && lhs._p2 == rhs._p2; }
+    friend bool operator!=(const Rect2 &lhs, const Rect2 &rhs) { return !(lhs == rhs); }
 
-    friend std::ostream &operator<<(std::ostream &os, const Rect2 &obj) {
-        return os << "Rect2(" << obj._topLeft << "," << obj._bottomRight << ")";
-    }
+    friend std::ostream &operator<<(std::ostream &os, const Rect2 &obj) { return os << "Rect2(" << obj._p1 << "," << obj._p2 << ")"; }
 
     friend bool operator<(const Rect2 &lhs, const Rect2 &rhs) {
-        if (lhs._topLeft < rhs._topLeft) {
-            return true;
-        }
-        if (rhs._topLeft < lhs._topLeft) {
-            return false;
-        }
-        return lhs._bottomRight < rhs._bottomRight;
+        if (lhs._p1 < rhs._p1) { return true; }
+        if (rhs._p1 < lhs._p1) { return false; }
+        return lhs._p2 < rhs._p2;
     }
 
     friend bool operator<=(const Rect2 &lhs, const Rect2 &rhs) { return !(rhs < lhs); }
