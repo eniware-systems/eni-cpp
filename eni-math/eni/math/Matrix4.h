@@ -5,6 +5,8 @@
 #include <eni/math/Vec3.h>
 #include <eni/math/Vec4.h>
 
+#include <array>
+
 namespace eni::math {
 
 /**
@@ -37,10 +39,10 @@ public:
 
     /**
      * Creates a new matrix from four column vectors.
-     * @param column0 The first column.
-     * @param column1 The second column.
-     * @param column2 The third column.
-     * @param column3 The fourth column.
+     * @param c0 The first column.
+     * @param c1 The second column.
+     * @param c2 The third column.
+     * @param c3 The fourth column.
      */
     Matrix4(const Vec4r &c0, const Vec4r &c1, const Vec4r &c2,
             const Vec4r &c3);
@@ -69,12 +71,12 @@ public:
     /**
      * @return A raw pointer to the data.
      */
-    inline real *getRawPointer() { return &a[0]; }
+    [[nodiscard]] real *data() { return _a.data(); }
 
     /**
      * @return A raw pointer to the data.
      */
-    inline const real *getRawPointer() const { return &a[0]; }
+    [[nodiscard]] const real *data() const { return _a.data(); }
 
     /**
      * A reference to a value.
@@ -82,7 +84,7 @@ public:
      * @param row The row of the value.
      * @return The value at the given cell.
      */
-    real &at(size_t column, size_t row);
+    [[nodiscard]] real &at(size_t column, size_t row);
 
     /**
      * A reference to a value.
@@ -90,13 +92,13 @@ public:
      * @param row The row of the value.
      * @return The value at the given cell.
      */
-    real at(size_t column, size_t row) const;
+    [[nodiscard]] real at(size_t column, size_t row) const;
 
 public:
     /**
      * @return The determinant of this matrix.
      */
-    real getDeterminant() const;
+    [[nodiscard]] real getDeterminant() const;
 
     /**
      * Inverts this matrix.
@@ -107,7 +109,7 @@ public:
     /**
      * @return An inverted copy of this matrix.
      */
-    inline Matrix4 getInverted() const {
+    [[nodiscard]] Matrix4 getInverted() const {
         Matrix4 m(*this);
         m.invert();
         return m;
@@ -122,7 +124,7 @@ public:
     /**
      * @return A transposed copy of this matrix.
      */
-    inline Matrix4 getTransposed() const {
+    [[nodiscard]] Matrix4 getTransposed() const {
         Matrix4 m(*this);
         m.transpose();
         return m;
@@ -134,14 +136,14 @@ public:
      * @param other The matrix to compare.
      * @return Whether both matrices are equal.
      */
-    bool operator==(const Matrix4 &other) const;
+    [[nodiscard]] bool operator==(const Matrix4 &other) const;
 
     /**
      * Compares another matrix with this one.
      * @param other The matrix to compare.
      * @return Whether both matrices are unequal.
      */
-    inline bool operator!=(const Matrix4 &other) const {
+    [[nodiscard]] bool operator!=(const Matrix4 &other) const {
         return !operator==(other);
     }
 
@@ -151,7 +153,7 @@ public:
      * @param other The matrix to multiply with.
      * @return The result of the multiplication.
      */
-    Matrix4 operator*(const Matrix4 &other) const;
+    [[nodiscard]] Matrix4 operator*(const Matrix4 &other) const;
 
     /**
      * Performs an multiplication where this matrix is the left-handed value of
@@ -170,10 +172,10 @@ public:
 
     /**
      * Multiplies a vector with this matrix.
-     * @param vector The vector to multiply.
+     * @param other The vector to multiply.
      * @return The multiplied result.
      */
-    inline Vec3r operator*(const Vec3r &other) const {
+    [[nodiscard]] Vec3r operator*(const Vec3r &other) const {
         Vec3r result(other);
         apply(result);
         return result;
@@ -187,10 +189,10 @@ public:
 
     /**
      * Multiplies a vector with this matrix.
-     * @param vector The vector to multiply.
+     * @param other The vector to multiply.
      * @return The multiplied result.
      */
-    inline Vec4r operator*(const Vec4r &other) const {
+    [[nodiscard]] Vec4r operator*(const Vec4r &other) const {
         Vec4r result(other);
         apply(result);
         return result;
@@ -233,7 +235,7 @@ public:
 
     /**
      * Sets this to a transform matrix.
-     * @param translate The translation component.
+     * @param translation The translation component.
      * @param orientation The orientation component.
      * @param scale The scale component.
      */
@@ -241,7 +243,7 @@ public:
                         const Vec3r &scale);
 
 private:
-    real __attribute__((aligned(16))) a[16]{};
+    alignas(16) std::array<real, 16> _a{};
 
 public:
     static const Matrix4 ZERO;//< The zero matrix.
@@ -251,10 +253,10 @@ public:
 /**
  * Stream implementation.
  * @param stream The stream.
- * @param vector The vector to write into the stream.
+ * @param matrix The vector to write into the stream.
  * @return The stream for chaining.
  */
-std::ostream &operator<<(std::ostream &s, const Matrix4 &mat);
+std::ostream &operator<<(std::ostream &stream, const Matrix4 &matrix);
 
 }// namespace eni::math
 

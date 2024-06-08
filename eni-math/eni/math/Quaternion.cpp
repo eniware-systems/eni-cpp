@@ -190,7 +190,7 @@ void Quaternion::toRotationMatrix(Matrix4 &mat) const {
     const auto _2yz = 2 * y * z;
     const auto _2zw = 2 * z * w;
 
-    auto *m = mat.getRawPointer();
+    auto *m = mat.data();
 
     m[0] = 1.0f - _2yy - _2zz;
     m[4] = _2xy + _2zw;
