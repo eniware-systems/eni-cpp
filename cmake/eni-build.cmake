@@ -24,7 +24,7 @@ macro(eni_set_target_defaults)
     target_compile_definitions(${ARG_TARGET_NAME} PUBLIC "${PREFIX_UC}_VERSION=${ARG_PACKAGE_VERSION}")
     target_include_directories(${ARG_TARGET_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
-    set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_STANDARD 20)
+    set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_STANDARD 23)
     set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
     set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_EXTENSIONS OFF)
     set_property(TARGET ${ARG_TARGET_NAME} PROPERTY CXX_FLAGS "-fcoroutines -Wall -Wextra")
