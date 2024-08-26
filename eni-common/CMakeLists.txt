@@ -8,9 +8,8 @@ project(eni-common VERSION ${ENI_PACKAGE_VERSION} LANGUAGES CXX)
 
 set(TARGET_NAME Common)
 
-eni_gather_sources(OUT LIB_SOURCES eni)
-
-add_library(${TARGET_NAME} ${LIB_SOURCES})
+add_library(${TARGET_NAME})
+eni_gather_sources(TARGET ${TARGET_NAME} eni)
 
 eni_set_target_defaults(
         TARGET_NAME ${TARGET_NAME}

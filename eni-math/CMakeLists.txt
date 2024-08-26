@@ -8,9 +8,8 @@ project(eni-math VERSION ${ENI_PACKAGE_VERSION} LANGUAGES CXX)
 
 set(TARGET_NAME Math)
 
-eni_gather_sources(OUT LIB_SOURCES eni)
-
-add_library(${TARGET_NAME} ${LIB_SOURCES})
+add_library(${TARGET_NAME})
+eni_gather_sources(TARGET ${TARGET_NAME} eni)
 
 target_link_libraries(${TARGET_NAME} PUBLIC Eni::Common)
 
