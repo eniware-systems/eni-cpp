@@ -21,6 +21,8 @@ function(eni_embed_binary)
     endif ()
 
     get_filename_component(VAR_NAME ${ARG_OUT} NAME)
+    string(REGEX REPLACE "[^a-zA-Z0-9]" "_" VAR_NAME "${VAR_NAME}")
+    string(REGEX REPLACE "_+$" "" VAR_NAME "${VAR_NAME}")
 
     file(READ ${ARG_FILENAME} data HEX)
     string(REGEX MATCHALL "([A-Fa-f0-9][A-Fa-f0-9])" SEPARATED_HEX ${data})
