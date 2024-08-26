@@ -1,11 +1,9 @@
 
 function(eni_embed_binary)
-    set(options TARGET FILENAME OUT)
-
     cmake_parse_arguments(
             ARG
             ""
-            "${options}"
+            "TARGET;FILENAME;OUT;VAR"
             ""
             ${ARGN}
     )
@@ -20,9 +18,16 @@ function(eni_embed_binary)
         message(FATAL_ERROR "No OUT parameter specified")
     endif ()
 
-    get_filename_component(VAR_NAME ${ARG_OUT} NAME)
+    if (NOT ARG_VAR)
+        set(VAR_NAME ${ARG_OUT})
+    else ()
+        set(VAR_NAME ${ARG_VAR})
+    endif ()
+
     string(REGEX REPLACE "[^a-zA-Z0-9]" "_" VAR_NAME "${VAR_NAME}")
     string(REGEX REPLACE "_+$" "" VAR_NAME "${VAR_NAME}")
+    string(REGEX REPLACE "^_+" "" VAR_NAME "${VAR_NAME}")
+    string(REGEX REPLACE "_+" "_" VAR_NAME "${VAR_NAME}")
 
     file(READ ${ARG_FILENAME} data HEX)
     string(REGEX MATCHALL "([A-Fa-f0-9][A-Fa-f0-9])" SEPARATED_HEX ${data})
@@ -39,15 +44,19 @@ function(eni_embed_binary)
         endif ()
     endforeach ()
 
+    string(REGEX REPLACE "[^a-zA-Z0-9]" "_" HEADER_GUARD "${ARG_OUT}_BINARY_DATA_INCLUDED")
+    string(REGEX REPLACE "^_+" "" HEADER_GUARD "${HEADER_GUARD}")
+    string(REGEX REPLACE "_+$" "" HEADER_GUARD "${HEADER_GUARD}")
+    string(REGEX REPLACE "_+" "_" HEADER_GUARD "${HEADER_GUARD}")
+    string(TOUPPER "${HEADER_GUARD}_H" HEADER_GUARD)
+
     set(output_c "
-#include \"${VAR_NAME}.h\"
+#include \"${ARG_OUT}.h\"
 uint8_t ${VAR_NAME}_data[] = {
     ${output_c}
 };
 unsigned ${VAR_NAME}_size = sizeof(${VAR_NAME}_data);
 ")
-
-    string(TOUPPER "${VAR_NAME}_H" HEADER_GUARD)
 
     set(output_h "
 #ifndef ${HEADER_GUARD}
