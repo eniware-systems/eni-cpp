@@ -9,12 +9,16 @@ namespace eni {
 
 // Define the target platform
 enum class TargetPlatform : char {
-    Linux,
+    Linux, Emscripten,
 };
 
 #if defined(__linux__)
 #define ENI_TARGET_PLATFORM_LINUX
 constexpr auto CurrentTargetPlatform = TargetPlatform::Linux;
+#elif defined(__EMSCRIPTEN__)
+#define ENI_TARGET_PLATFORM_EMSCRIPTEN
+#define ENI_NO_DEBUG
+constexpr auto CurrentTargetPlatform = TargetPlatform::Emscripten;
 #else
 #error "Target platform is not supported"
 #endif
@@ -37,6 +41,8 @@ public:
 };
 
 #if defined(ENI_TARGET_PLATFORM_LINUX)
+using PlatformTypes = PlatformTypesGeneric;
+#elif defined(ENI_TARGET_PLATFORM_EMSCRIPTEN)
 using PlatformTypes = PlatformTypesGeneric;
 #endif
 

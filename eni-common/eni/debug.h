@@ -5,6 +5,10 @@
 #ifndef ENI_DEBUG_H
 #define ENI_DEBUG_H
 
+#include "build_config.h"
+
+#ifndef ENI_NO_DEBUG
+
 #include <experimental/source_location>
 #include <fmt/format.h>
 
@@ -35,5 +39,7 @@ struct Tracer {
 #endif
 
 }// namespace eni::debug
+
+#endif
 
 #endif//ENI_DEBUG_H

@@ -8,7 +8,12 @@ project(eni-common VERSION ${ENI_PACKAGE_VERSION} LANGUAGES CXX)
 
 set(TARGET_NAME Common)
 
-add_library(${TARGET_NAME})
+if (NOT ENI_STATIC)
+    add_library(${TARGET_NAME} SHARED)
+else ()
+    add_library(${TARGET_NAME} STATIC)
+endif ()
+
 eni_gather_sources(TARGET ${TARGET_NAME} eni)
 
 eni_set_target_defaults(
