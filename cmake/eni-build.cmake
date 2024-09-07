@@ -123,3 +123,22 @@ macro(eni_add_unit_test)
 
     set(TESTNAMES ${TESTNAMES} ${TEST_NAME})
 endmacro(eni_add_unit_test)
+
+# Sets up the project to the standards defined in eni-cpp, including clang-format and clang-tidy configurations
+macro(eni_init)
+    if (NOT ENI_HOME)
+        message(FATAL_ERROR "ENI_HOME cache variable was not set")
+    endif ()
+
+    message(STATUS "ENI_HOME set to ${ENI_HOME}")
+
+    if (NOT EXISTS "${CMAKE_SOURCE_DIR}/.clang-format")
+        message(STATUS "Copying ${ENI_HOME}/.clang-format to ${CMAKE_SOURCE_DIR}/.clang-format")
+        configure_file("${ENI_HOME}/.clang-format" "${CMAKE_SOURCE_DIR}/.clang-format" COPYONLY)
+    endif ()
+
+    if (NOT EXISTS "${CMAKE_SOURCE_DIR}/.clang-tidy")
+        message(STATUS "Copying ${ENI_HOME}/.clang-tidy to ${CMAKE_SOURCE_DIR}/.clang-tidy")
+        configure_file("${ENI_HOME}/.clang-tidy" "${CMAKE_SOURCE_DIR}/.clang-tidy" COPYONLY)
+    endif ()
+endmacro()
