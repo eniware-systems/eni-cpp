@@ -86,6 +86,12 @@ macro(eni_add_unit_test)
         get_filename_component(TEST_NAME ${TEST_NAME} NAME_WE)
     endif ()
 
+    find_package(Catch2 CONFIG)
+    if (NOT Catch2_FOUND)
+        message(WARNING "Could not find Catch2, unit tests for ${TEST_NAME} are disabled")
+        return()
+    endif ()
+
     message(STATUS "Generating Unit test ${TEST_NAME}")
     #add_executable(${TEST_NAME} EXCLUDE_FROM_ALL ${TEST_SOURCES})
     add_executable(${TEST_NAME} ${TEST_SOURCES})
@@ -95,7 +101,6 @@ macro(eni_add_unit_test)
 
     eni_set_target_defaults(${TEST_NAME} TARGET_NAME ${TEST_NAME} NO_EXPORT)
 
-    find_package(Catch2 CONFIG REQUIRED)
     target_link_libraries(${TEST_NAME} PRIVATE Catch2::Catch2WithMain)
     target_include_directories(${TEST_NAME} PRIVATE ${TEST_INCLUDE_DIRS})
 
