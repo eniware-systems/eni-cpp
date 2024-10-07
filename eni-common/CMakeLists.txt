@@ -34,5 +34,6 @@ eni_add_unit_test(NAME InterceptorTests SOURCES tests/InterceptorTests.cpp LIBS 
 eni_add_unit_test(SOURCES tests/UtilTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(SOURCES tests/EventDispatcherTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(SOURCES tests/StringifyTests.cpp LIBS ${TARGET_NAME})
+eni_add_unit_test(SOURCES tests/TypeTraitsTests.cpp LIBS ${TARGET_NAME})
 
 add_subdirectory(tests/embed_data_test)

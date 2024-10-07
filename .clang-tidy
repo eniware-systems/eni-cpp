@@ -2,6 +2,7 @@ WarningsAsErrors: '*'
 Checks: 'boost-*,
   bugprone-*,
   -bugprone-easily-swappable-parameters,
+  -bugprone-chained-comparison,
   cppcoreguidelines-*,
   -cppcoreguidelines-pro-type-reinterpret-cast,
   -cppcoreguidelines-special-member-functions,
