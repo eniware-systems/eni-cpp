@@ -31,8 +31,10 @@ target_link_libraries(${TARGET_NAME} PUBLIC fmt::fmt)
 # Tests
 eni_add_unit_test(NAME InterceptorTests SOURCES tests/InterceptorTests.cpp LIBS ${TARGET_NAME})
 # Reminder: We can skip the NAME argument if we only have one source!
-eni_add_unit_test(SOURCES tests/UtilTests.cpp LIBS ${TARGET_NAME})
+eni_add_unit_test(SOURCES tests/AlgorithmTests.cpp LIBS ${TARGET_NAME})
+eni_add_unit_test(SOURCES tests/ConceptsTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(SOURCES tests/EventDispatcherTests.cpp LIBS ${TARGET_NAME})
+eni_add_unit_test(SOURCES tests/MemoryTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(SOURCES tests/StringifyTests.cpp LIBS ${TARGET_NAME})
 eni_add_unit_test(SOURCES tests/TypeTraitsTests.cpp LIBS ${TARGET_NAME})
 

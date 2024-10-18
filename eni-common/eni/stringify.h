@@ -1,7 +1,7 @@
 #ifndef ENI_STRINGIFY_H
 #define ENI_STRINGIFY_H
 
-#include <eni/util.h>
+#include <eni/concepts/container.h>
 
 #include <sstream>
 #include <string>
@@ -62,7 +62,6 @@ std::ostream &operator<<(std::ostream &os, const std::variant<Types...> &variant
     std::visit([&](const auto &v) { os << v; }, variant);
     return os;
 }
-
 
 template<typename T>
 concept streamable =
