@@ -39,21 +39,15 @@ concept iterable_type = requires(IterableT a) {
 /**
  * @brief Concept for identifying iterable types containing a specific value type.
  *
- * This concept checks if a given type is both iterable and contains elements of a
- * specified value type. To satisfy this concept, the type must:
- * - Meet the requirements of the `iterable_type` concept, meaning it must have
- *   member functions `begin()` and `end()` returning iterators.
- * - The `value_type` of the iterable must be the same as the specified `ValueT`.
+ * This concept checks if a given type is both iterable and whether its `value_type`
+ * can be converted to a specified `ValueT`. It ensures that the iterable can store
+ * or return elements of the required type.
  *
- * This concept is useful for generic programming where functions or algorithms
- * require both iterability and a specific type of elements within the iterable,
- * such as ensuring that a container holds a specific data type.
- *
- * @tparam IterableT The type to check as an iterable type.
- * @tparam ValueT The type to compare against the iterable's `value_type`.
+ * @tparam IterableT The type to check as an iterable.
+ * @tparam ValueT The target value type to compare against the iterable's `value_type`.
  */
 template<typename IterableT, typename ValueT>
-concept iterable_of = iterable_type<IterableT> && std::is_same_v<ValueT, typename IterableT::value_type>;
+concept iterable_of = iterable_type<IterableT> && std::is_convertible_v<typename IterableT::value_type, ValueT>;
 
 }// namespace eni
 
