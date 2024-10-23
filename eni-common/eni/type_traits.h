@@ -85,8 +85,46 @@ struct merge_tuples<std::tuple<T...>, std::tuple<U...>> {
     using type = std::tuple<T..., U...>;
 };
 
+/**
+ * @brief Alias template for `merge_tuples` to simplify usage.
+ *
+ * This alias provides a shorthand way to obtain the merged tuple type from two `std::tuple` types.
+ *
+ * @tparam T The first `std::tuple` type.
+ * @tparam U The second `std::tuple` type.
+ */
 template<typename T, typename U>
 using merge_tuples_v = merge_tuples<T, U>::type;
+
+/**
+ * @brief Metafunction to check if a type is present in a tuple.
+ *
+ * This struct determines whether a specific type `T` is contained within a
+ * `std::tuple` of types. It uses a helper type trait to check for the presence
+ * of `T` among the elements of the tuple.
+ *
+ * @tparam T The type to check for.
+ * @tparam U The `std::tuple` to search within.
+ */
+template<typename T, typename U>
+struct tuple_contains;
+
+template<typename T, typename... U>
+struct tuple_contains<T, std::tuple<U...>> {
+    using value = std::bool_constant<is_same_any_v < T, U...>>();
+};
+
+/**
+ * @brief Alias template for accessing `tuple_contains` result.
+ *
+ * Simplifies access to the result of `tuple_contains`, making it easier to check
+ * if a type is contained within a tuple.
+ *
+ * @tparam T The type to check for.
+ * @tparam U The `std::tuple` to search within.
+ */
+template<typename T, typename TupleT>
+using tuple_contains_v = tuple_contains<T, TupleT>::value;
 
 }// namespace eni
 
