@@ -68,6 +68,26 @@ template<typename T>
 concept shared_ptr_type = requires { typename T::element_type; } &&
                           std::is_same_v<T, std::shared_ptr<typename T::element_type>>;
 
+/**
+ * @brief Metafunction to merge two tuples into a single tuple.
+ *
+ * This struct takes two `std::tuple` types and produces a new `std::tuple`
+ * containing all elements from both input tuples, preserving the order.
+ *
+ * @tparam T The first tuple.
+ * @tparam U The second tuple.
+ */
+template<typename T, typename U>
+struct merge_tuples;
+
+template<typename... T, typename... U>
+struct merge_tuples<std::tuple<T...>, std::tuple<U...>> {
+    using type = std::tuple<T..., U...>;
+};
+
+template<typename T, typename U>
+using merge_tuples_v = merge_tuples<T, U>::type;
+
 }// namespace eni
 
 #endif//ENI_TYPE_TRAITS_H
