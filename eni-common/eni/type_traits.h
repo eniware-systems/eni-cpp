@@ -111,7 +111,7 @@ struct tuple_contains;
 
 template<typename T, typename... U>
 struct tuple_contains<T, std::tuple<U...>> {
-    using value = std::bool_constant<is_same_any_v < T, U...>>();
+    using value = std::bool_constant<is_same_any_v<T, U...>>;
 };
 
 /**
@@ -124,7 +124,7 @@ struct tuple_contains<T, std::tuple<U...>> {
  * @tparam U The `std::tuple` to search within.
  */
 template<typename T, typename TupleT>
-using tuple_contains_v = tuple_contains<T, TupleT>::value;
+constexpr bool tuple_contains_v = typename tuple_contains<T, TupleT>::value();// NOLINT(*-identifier-naming)
 
 }// namespace eni
 
