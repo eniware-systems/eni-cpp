@@ -6,5 +6,6 @@
 #define ENI_ALGORITHM_H
 
 #include <eni/algorithm/erase_pointer.h>
+#include <eni/algorithm/tuple.h>
 
 #endif//ENI_ALGORITHM_H

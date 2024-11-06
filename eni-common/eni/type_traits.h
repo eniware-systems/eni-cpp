@@ -42,6 +42,9 @@ struct function_traits<R(Args...)> {
      */
     template<size_t i>
     using arg = std::tuple_element_t<i, args>;
+
+    /// The return type of the function
+    using return_type = R;
 };
 
 /**
