@@ -8,7 +8,7 @@ project(eni-math VERSION ${ENI_PACKAGE_VERSION} LANGUAGES CXX)
 
 set(TARGET_NAME Math)
 
-if (NOT ENI_STATIC)
+if (ENI_SHARED)
     add_library(${TARGET_NAME} SHARED)
 else ()
     add_library(${TARGET_NAME} STATIC)

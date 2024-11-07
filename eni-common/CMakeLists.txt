@@ -8,7 +8,7 @@ project(eni-common VERSION ${ENI_PACKAGE_VERSION} LANGUAGES CXX)
 
 set(TARGET_NAME Common)
 
-if (NOT ENI_STATIC)
+if (ENI_SHARED)
     add_library(${TARGET_NAME} SHARED)
 else ()
     add_library(${TARGET_NAME} STATIC)
